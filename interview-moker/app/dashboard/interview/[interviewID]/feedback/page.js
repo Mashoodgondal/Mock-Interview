@@ -252,6 +252,28 @@ const InterviewResults = ({ mockId, interviewData }) => {
                     Refresh Results
                 </button>
             </div>
+
+
+
+            {/* Action Buttons
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+                <button
+                    onClick={() => window.print()}
+                    className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+                >
+                    Print Results
+                </button>
+                <button
+                    onClick={fetchResults}
+                    className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200"
+                >
+                    Refresh Results
+                </button>
+            </div> */}
+
+
+
+
         </div>
     )
 }
