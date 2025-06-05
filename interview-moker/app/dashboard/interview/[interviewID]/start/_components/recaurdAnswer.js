@@ -11,7 +11,8 @@ import { db } from '../../../../../../utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import useSpeechToText from 'react-hook-speech-to-text';
-
+// import InterviewResults from '../../feedback/page';
+import Link from 'next/link';
 const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
     const { user } = useUser()
     const [userAnswer, setUserAnswer] = useState('')
@@ -278,6 +279,12 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                 >
                     🐛 Debug Info
                 </button>
+            </div>
+            <div>
+                <Link href='../../feedback'>
+
+                    <button className='border py-2 px-3 bg-amber-700'>Check feedback</button>
+                </Link>
             </div>
         </div>
     )
