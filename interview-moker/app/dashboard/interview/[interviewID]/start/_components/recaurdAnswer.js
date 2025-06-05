@@ -40,23 +40,35 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
     };
 
     const submitAnswer = async () => {
-        if (!userAnswer || userAnswer.trim().length < 5) {
+        const trimmedAnswer = userAnswer?.trim();
+        if (!trimmedAnswer || trimmedAnswer.split(' ').length < 3) {
             alert('Your answer is too short, please try again.');
             return;
         }
+
+        // if (!userAnswer || userAnswer.trim().length < 3) {
+        //     alert('Your answer is too short, please try again.');
+        //     return;
+        // }
 
         if (!interviewData || !interviewData.mockId) {
             console.error("Missing interviewData or mockId");
             alert("Interview session not initialized properly.");
             return;
         }
-
         const feedbackPrompt =
+            `You are a supportive interview coach. Evaluate the user's answer based on communication skills, not correctness.\n` +
+            `Focus on: clarity, structure, confidence, and relevance to the question asked.\n\n` +
             `Question: ${questions[activeIndex]?.question}\n` +
             `User Answer: ${userAnswer}\n\n` +
-            `Give a JSON response ONLY with two fields: "rating" and "feedback". Example:\n` +
-            `{"rating": "4", "feedback": "You answered well. Add more details."}`;
-
+            `Guidelines:\n` +
+            `- Rate 3-5 (avoid low ratings unless answer is completely off-topic)\n` +
+            `- Keep feedback under 25 words\n` +
+            `- Start with something positive\n` +
+            `- Give one specific improvement tip if needed\n` +
+            `- Don't compare to a "correct" answer - evaluate communication quality\n\n` +
+            `Return JSON: {"rating": "3-5", "feedback": "brief positive feedback with one improvement tip"}\n` +
+            `Example: {"rating": "4", "feedback": "Clear explanation with good examples. Consider adding more specific details to strengthen your points."}`;
         try {
             const result = await chatSession.sendMessage(feedbackPrompt);
             const rawText = await result.response.text();
@@ -254,6 +266,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             <div className="flex justify-center mt-4">
                 <button
                     onClick={() => {
+
                         console.log("Current Answer:", userAnswer);
                         console.log("Interview Data:", interviewData);
                         console.log("Active Question:", questions[activeIndex]);
