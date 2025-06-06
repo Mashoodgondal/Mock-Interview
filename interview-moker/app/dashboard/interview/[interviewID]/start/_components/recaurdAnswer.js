@@ -47,11 +47,6 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             return;
         }
 
-        // if (!userAnswer || userAnswer.trim().length < 3) {
-        //     alert('Your answer is too short, please try again.');
-        //     return;
-        // }
-
         if (!interviewData || !interviewData.mockId) {
             console.error("Missing interviewData or mockId");
             alert("Interview session not initialized properly.");
