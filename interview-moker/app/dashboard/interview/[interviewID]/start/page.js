@@ -96,7 +96,7 @@ function StartInterview() {
                 activeIndex={activeIndex}
                 interviewData={interviewData}
             />
-            <div><Link href={'/dashboard/interview/' + interviewData?.mockId + "/feedback"}>feedback</Link></div>
+            <div><Link href={'/dashboard/interview/' + mockId + "/feedback"}>feedback</Link></div>
         </div>
     );
 }
