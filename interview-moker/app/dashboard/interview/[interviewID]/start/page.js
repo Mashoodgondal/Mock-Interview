@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "next/navigation";
 import QuestionSection from "./_components/questionSection";
 import RecaurdAnswer from "./_components/recaurdAnswer";
+import Link from "next/link";
 
 function StartInterview() {
     const [interviewData, setInterviewData] = useState(null);
@@ -95,6 +96,7 @@ function StartInterview() {
                 activeIndex={activeIndex}
                 interviewData={interviewData}
             />
+            <div><Link href={'/dashboard/interview/' + interviewData?.mockId + "/feedback"}>feedback</Link></div>
         </div>
     );
 }

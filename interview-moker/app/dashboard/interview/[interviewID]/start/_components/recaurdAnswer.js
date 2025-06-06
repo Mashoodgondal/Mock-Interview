@@ -280,12 +280,6 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                     🐛 Debug Info
                 </button>
             </div>
-            <div>
-                <Link href='../../feedback'>
-
-                    <button className='border py-2 px-3 bg-amber-700'>Check feedback</button>
-                </Link>
-            </div>
         </div>
     )
 }

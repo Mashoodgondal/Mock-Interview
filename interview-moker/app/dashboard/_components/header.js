@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect } from 'react'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { UserButton } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -29,8 +29,6 @@ const HeaderDashboard = () => {
                     <li className={`hover:text-blue-400 hover:font-bold transition-all cursor-pointer ${path === '/how' ? 'text-indigo-400 font-bold' : ''}`}>How it works?</li>
                 </Link>
             </ul>
-
-
             <UserButton />
         </div>
     )
