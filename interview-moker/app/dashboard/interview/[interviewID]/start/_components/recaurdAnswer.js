@@ -12,7 +12,7 @@ import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import useSpeechToText from 'react-hook-speech-to-text';
 // import InterviewResults from '../../feedback/page';
-import Link from 'next/link';
+// import Link from 'next/link';
 const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
     const { user } = useUser()
     const [userAnswer, setUserAnswer] = useState('')

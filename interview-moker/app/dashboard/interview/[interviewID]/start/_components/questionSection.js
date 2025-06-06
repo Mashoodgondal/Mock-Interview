@@ -3,7 +3,11 @@ import { FaVolumeHigh } from "react-icons/fa6";
 
 const QuestionSection = ({ questions, isLoading, error, activeIndex, onQuestion }) => {
     if (isLoading) {
-        return <div className="p-4 text-gray-500">Loading interview questions...</div>;
+        // return <div className="p-4 text-gray-500">Loading interview questions...</div>;
+        return <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <span className="ml-3 text-gray-600 dark:text-gray-400">Loading results...</span>
+        </div>;
     }
 
     if (error) {

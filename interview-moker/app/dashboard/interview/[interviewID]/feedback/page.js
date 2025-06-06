@@ -86,6 +86,13 @@ const InterviewResults = ({ mockId, interviewData }) => {
         const total = results.reduce((sum, result) => sum + (parseInt(result.rating) || 0), 0)
         return (total / results.length).toFixed(1)
     }
+    if (!mockId) {
+        return (
+            <div className="text-red-600 font-medium p-6 text-center">
+                Error: No mockId provided. Please return to the previous page and try again.
+            </div>
+        )
+    }
 
     if (loading) {
         return (
@@ -95,6 +102,9 @@ const InterviewResults = ({ mockId, interviewData }) => {
             </div>
         )
     }
+
+
+
 
     if (error) {
         return (
