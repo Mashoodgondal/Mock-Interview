@@ -280,3 +280,19 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
 }
 
 export default RecordAnswer
+
+
+
+
+
+
+
+
+
+//   console.log("Current Answer:", userAnswer);
+//                         console.log("Interview Data:", interviewData);
+//                         console.log("Active Question:", questions[activeIndex]);
+//                         console.log("Input Mode:", inputMode);
+//                         console.log("Is Typing:", isTyping);
+//                         console.log("Is Recording:", isRecording);
+//                     }}
