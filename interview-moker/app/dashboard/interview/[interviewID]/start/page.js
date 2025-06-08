@@ -21,6 +21,10 @@ function StartInterview() {
     console.log(params);
 
     const interviewId = params?.interviewID;
+    const safeInterviewData = {
+        ...interviewData,
+        mockId: interviewData?.mockId || `temp_${Date.now()}`
+    }
 
     useEffect(() => {
         if (interviewId) {
@@ -91,11 +95,23 @@ function StartInterview() {
                 error={error}
                 onQuestion={handleQuestionClick}
             />
+
+            // Before rendering RecordAnswer
+
+
+
             <RecaurdAnswer
                 questions={mockInterviewQuestions}
                 activeIndex={activeIndex}
-                interviewData={interviewData}
+                interviewData={safeInterviewData}
             />
+
+            {/* <RecaurdAnswer
+                questions={mockInterviewQuestions}
+                activeIndex={activeIndex}
+                interviewData={interviewData}
+
+            /> */}
             <div><Link href={'/dashboard/interview/' + mockId + "/feedback"}>feedback</Link></div>
         </div>
     );
