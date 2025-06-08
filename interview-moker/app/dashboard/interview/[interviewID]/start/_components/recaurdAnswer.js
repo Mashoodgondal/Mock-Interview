@@ -415,6 +415,132 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
 
             console.log("Interview Mock ID:", interviewData.mockId);
 
+
+
+
+            // Add this code to your parent component (where you're calling RecordAnswer)
+            // This will help debug what data is being passed
+
+            const ParentComponentDebug = () => {
+                // Your existing state and logic here...
+
+                // Add this useEffect to debug your data
+                useEffect(() => {
+                    console.log("=== PARENT COMPONENT DEBUG ===");
+                    console.log("mockInterviewQuestions:", mockInterviewQuestions);
+                    console.log("activeIndex:", activeIndex);
+                    console.log("interviewData:", interviewData);
+                    console.log("interviewData type:", typeof interviewData);
+
+                    if (interviewData) {
+                        console.log("interviewData keys:", Object.keys(interviewData));
+                        console.log("interviewData.mockId:", interviewData.mockId);
+                    }
+
+                    console.log("===============================");
+                }, [mockInterviewQuestions, activeIndex, interviewData]);
+
+                // Before rendering RecordAnswer, add this check:
+                if (!interviewData) {
+                    return (
+                        <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                            <h3 className="font-bold">Debug: InterviewData is undefined!</h3>
+                            <p>Check your data fetching or state management.</p>
+                            <details className="mt-2">
+                                <summary>Debugging Info</summary>
+                                <pre className="mt-2 bg-white p-2 rounded text-black">
+                                    {JSON.stringify({
+                                        mockInterviewQuestions: mockInterviewQuestions?.length || 'undefined',
+                                        activeIndex,
+                                        interviewData,
+                                    }, null, 2)}
+                                </pre>
+                            </details>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div>
+                        {/* Your other components */}
+
+                        <RecordAnswer
+                            questions={mockInterviewQuestions}
+                            activeIndex={activeIndex}
+                            interviewData={interviewData}
+                        />
+                    </div>
+                );
+            };
+
+            // Alternative: If you're fetching interviewData asynchronously, make sure to handle loading state:
+            const ParentWithLoadingState = () => {
+                const [interviewData, setInterviewData] = useState(null);
+                const [loading, setLoading] = useState(true);
+
+                useEffect(() => {
+                    const fetchInterviewData = async () => {
+                        try {
+                            // Your data fetching logic here
+                            const data = await fetchYourInterviewData();
+
+                            // Make sure mockId exists in the data
+                            if (!data.mockId) {
+                                console.error("Fetched data missing mockId:", data);
+                                // Handle this case appropriately
+                                data.mockId = generateMockId(); // or throw an error
+                            }
+
+                            setInterviewData(data);
+                        } catch (error) {
+                            console.error("Error fetching interview data:", error);
+                        } finally {
+                            setLoading(false);
+                        }
+                    };
+
+                    fetchInterviewData();
+                }, []);
+
+                if (loading) {
+                    return <div>Loading interview data...</div>;
+                }
+
+                if (!interviewData) {
+                    return <div>Failed to load interview data</div>;
+                }
+
+                return (
+                    <RecordAnswer
+                        questions={mockInterviewQuestions}
+                        activeIndex={activeIndex}
+                        interviewData={interviewData}
+                    />
+                );
+            };
+
+            // Helper function to generate mockId if needed
+            const generateMockId = () => {
+                return `mock_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             // Double-check mockId before database insertion
             if (!interviewData.mockId) {
                 throw new Error("mockId is undefined at insertion time");
