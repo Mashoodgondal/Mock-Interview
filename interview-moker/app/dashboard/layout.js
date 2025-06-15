@@ -1,6 +1,6 @@
 import React from 'react'
 import HeaderDashboard from './_components/header'
-import Footer from './_components/footer/page'
+import Footer from './_components/footer  '
 
 
 const Dashboardlayout = ({ children }) => {

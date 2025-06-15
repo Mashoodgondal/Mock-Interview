@@ -151,7 +151,7 @@ Do NOT include fields like 'rating' or 'feedback'. Do NOT wrap in \`\`\`json. Re
                                     />
                                 </div>
 
-                                {/* <div>
+                                <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">Experience (Years)*</label>
                                     <input
                                         type="number"
@@ -159,11 +159,34 @@ Do NOT include fields like 'rating' or 'feedback'. Do NOT wrap in \`\`\`json. Re
                                         max="20"
                                         required
                                         placeholder="6"
-                                        onChange={(e) => setjobExperience(e.target.value)}
+                                        onChange={(e) => {
+                                            const value = parseInt(e.target.value, 10);
+                                            if (value > 20) {
+                                                alert("Experience cannot be more than 20 years.");
+                                                e.target.value = 20;
+                                                setjobExperience("20");
+                                            } else if (value < 0) {
+                                                alert("Experience cannot be less than 0.");
+                                                e.target.value = 0;
+                                                setjobExperience("0");
+                                            } else {
+                                                setjobExperience(e.target.value);
+                                            }
+                                        }}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
-                                </div> */}
-                                <input
+
+                                    {/* <input
+                                        type="number"
+                                        min="0"
+                                        max="20"
+                                        required
+                                        placeholder="6"
+                                        onChange={(e) => setjobExperience(e.target.value)}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    /> */}
+                                </div>
+                                {/* <input
                                     type="number"
                                     min="0"
                                     max="20"
@@ -184,7 +207,7 @@ Do NOT include fields like 'rating' or 'feedback'. Do NOT wrap in \`\`\`json. Re
                                         }
                                     }}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                />
+                                /> */}
 
                             </form>
                         </div>
