@@ -130,9 +130,9 @@ import { eq } from "drizzle-orm";
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation";
 import QuestionSection from "./_components/questionSection";
-import RecaurdAnswer from "./_components/recaurdAnswer";
+// import RecaurdAnswer from "./_components/recaurdAnswer";
 // import { Button } from "@/components/ui/button";
-import Link from "next/link";
+// import Link from "next/link";
 
 function StartInterview() {
     const [interviewData, setInterviewData] = useState(null);
@@ -212,11 +212,11 @@ function StartInterview() {
                     onQuestion={handleQuestionClick}
                 />
 
-                <RecaurdAnswer
+                {/* <RecaurdAnswer
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     interviewData={interviewData}
-                />
+                /> */}
             </div>
         </div>
     );

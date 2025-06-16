@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 const HeaderDashboard = () => {
-    const path = usePathname(); // ✅ FIXED: correctly calling the hook
+    const path = usePathname();
 
     useEffect(() => {
         console.log("Current path:", path);
