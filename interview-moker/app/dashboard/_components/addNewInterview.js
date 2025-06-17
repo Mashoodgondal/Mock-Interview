@@ -245,67 +245,163 @@ const NewInterview = () => {
     const router = useRouter();
 
     const SubmitHandler = async (e) => {
-        setloading(true);
         e.preventDefault();
-        console.log(jobPosition, jobDescription, jobExperience);
 
+        if (!jobPosition || !jobDescription || !jobExperience) {
+            alert("Please fill in all the fields: Job Position, Description, and Experience.");
+            return;
+        }
+
+        setloading(true);
+
+        // const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Include 'question' and 'answer' fields.`;
         const InputPrompt = `
-Job Position: ${jobPosition}
-Tech Stack: ${jobDescription}
-Experience: ${jobExperience} years
+You are an AI that generates mock interview questions and answers.
 
-Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} unique interview questions.
-Return the result as a JSON array.
-Each item in the array should have 'question' and 'answer' fields.
-Do not wrap the JSON in markdown syntax.
+Generate exactly ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers for the following job:
+
+Job Position: ${jobPosition}
+Job Description: ${jobDescription}
+Years of Experience: ${jobExperience}
+
+Return ONLY a valid JSON array. Do NOT include any feedback, explanation, commentary, or markdown formatting (like \`\`\`json). Only return the following format:
+
+[
+  {
+    "question": "First interview question here",
+    "answer": "Answer to the first question"
+  },
+  ...
+]
+
+Do NOT include fields like 'rating' or 'feedback'. Do NOT wrap in \`\`\`json. Return only valid JSON.
 `;
 
-        let MockJsonResp = "";
-        try {
-            const parsed = JSON.parse(MockJsonResp);
+        console.log("before");
+        const result = await chatSession.sendMessage(InputPrompt);
+        console.log("after");
 
-            if (Array.isArray(parsed)) {
-                console.log("Parsed Questions Array:", parsed); // ✅ You can expand this in the browser devtools
-                setjsonResp(parsed); // store array instead of string
-            } else {
-                console.error("❌ Gemini did not return an array. Returned:", parsed);
-                alert("Please try again. Format was not an array.");
-                setloading(false);
-                return;
-            }
-        } catch (jsonErr) {
-            console.error("❌ JSON parse failed. Response might not be valid JSON:");
-            console.error("Cleaned text:", MockJsonResp);
-            console.error("Error:", jsonErr);
-            alert("Gemini returned an invalid format. Please try again.");
+        const rawText = await result.response.text();
+        console.log("Raw Gemini response:\n", rawText);
+
+        const MockjsonResp = rawText.replace('```json', '').replace('```', '');
+
+        let parsedJson;
+        try {
+            parsedJson = JSON.parse(MockjsonResp);
+            console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
+            setjsonResp(MockjsonResp);
+        } catch (err) {
+            console.error("Failed to parse JSON response:", err);
+            alert("Invalid response format. Please try again.");
             setloading(false);
             return;
         }
 
+        // try {
+        //     console.log("before")
+        //     const result = await chatSession.sendMessage(InputPrompt);
+        //     console.log("after")
+        //     const MockjsonResp = (result.response.text()).replace('```json', '').replace('```', '')
 
-        if (MockJsonResp) {
-            const resp = await db.insert(MockInterview)
-                .values({
-                    mockId: uuidv4(),
-                    jsonMockResp: MockJsonResp,
-                    jobPosition: jobPosition,
-                    jobDesc: jobDescription,
-                    jobExperience: jobExperience,
-                    createdBy: user?.primaryEmailAddress?.emailAddress,
-                    createdAt: moment().format('DD-MM-yyyy')
-                }).returning({ mockId: MockInterview.mockId });
+        //     let parsedJson;
+        //     try {
+        //         parsedJson = JSON.parse(MockjsonResp);
+        //         console.log(parsedJson);
+        //         setjsonResp(MockjsonResp);
+        //     } catch (err) {
+        //         console.error("Failed to parse JSON response:", err);
+        //         alert("Invalid response format. Please try again.");
+        //         setloading(false);
+        //         return;
+        //     }
 
-            console.log("Inserted ID:", resp);
-            if (resp) {
-                setOpen(false);
-                router.push('/dashboard/interview/' + resp[0]?.mockId);
-            }
-        } else {
-            console.log("ERROR: No mock response received.");
-        }
+        const newMockid = uuidv4();
+
+        await db.insert(MockInterview).values({
+            mockId: newMockid,
+            jsonMockResp: MockjsonResp,
+            jobPosition,
+            jobDesc: jobDescription,
+            jobExperience,
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            createdAt: moment().format('DD-MM-YYYY')
+        }).returning({ mockId: MockInterview.mockId });
+        router.push(`dashboard/interview/${newMockid}`);
+        setOpen(false);
+        // } catch (error) {
+        //     console.error("Error while generating or saving mock data: ", error);
+        //     alert("Something went wrong. Please try again.");
+        // }
 
         setloading(false);
     };
+
+    //     const SubmitHandler = async (e) => {
+    //         setloading(true);
+    //         e.preventDefault();
+    //         console.log(jobPosition, jobDescription, jobExperience);
+
+    //         const InputPrompt = `
+    // Job Position: ${jobPosition}
+    // Tech Stack: ${jobDescription}
+    // Experience: ${jobExperience} years
+
+    // Please generate ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} unique interview questions.
+    // Return the result as a JSON array.
+    // Each item in the array should have 'question' and 'answer' fields.
+    // Do not wrap the JSON in markdown syntax.
+    // `;
+
+    //         const result = await chatSession.sendMessage(InputPrompt);
+
+    //         const MockjsonResp = (result.response.text()).replace('```json', '').replace('```', '')
+    //         let MockJsonResp = "";
+    //         try {
+    //             const parsed = JSON.parse(MockJsonResp);
+
+    //             if (Array.isArray(parsed)) {
+    //                 console.log("Parsed Questions Array:", parsed); // ✅ You can expand this in the browser devtools
+    //                 setjsonResp(parsed); // store array instead of string
+    //             } else {
+    //                 console.error("❌ Gemini did not return an array. Returned:", parsed);
+    //                 alert("Please try again. Format was not an array.");
+    //                 setloading(false);
+    //                 return;
+    //             }
+    //         } catch (jsonErr) {
+    //             console.error("❌ JSON parse failed. Response might not be valid JSON:");
+    //             console.error("Cleaned text:", MockJsonResp);
+    //             console.error("Error:", jsonErr);
+    //             alert("Gemini returned an invalid format. Please try again.");
+    //             setloading(false);
+    //             return;
+    //         }
+
+
+    //         if (MockJsonResp) {
+    //             const resp = await db.insert(MockInterview)
+    //                 .values({
+    //                     mockId: uuidv4(),
+    //                     jsonMockResp: MockJsonResp,
+    //                     jobPosition: jobPosition,
+    //                     jobDesc: jobDescription,
+    //                     jobExperience: jobExperience,
+    //                     createdBy: user?.primaryEmailAddress?.emailAddress,
+    //                     createdAt: moment().format('DD-MM-yyyy')
+    //                 }).returning({ mockId: MockInterview.mockId });
+
+    //             console.log("Inserted ID:", resp);
+    //             if (resp) {
+    //                 setOpen(false);
+    //                 router.push('/dashboard/interview/' + resp[0]?.mockId);
+    //             }
+    //         } else {
+    //             console.log("ERROR: No mock response received.");
+    //         }
+
+    //         setloading(false);
+    //     };
 
     return (
         <div>
