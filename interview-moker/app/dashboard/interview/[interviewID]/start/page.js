@@ -130,38 +130,34 @@ import { eq } from "drizzle-orm";
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation";
 import QuestionSection from "./_components/questionSection";
-// import RecaurdAnswer from "./_components/recaurdAnswer";
+import RecaurdAnswer from "./_components/recaurdAnswer";
 // import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 
 function StartInterview() {
     const [interviewData, setInterviewData] = useState(null);
     const [mockInterviewQuestions, setMockInterviewQuestions] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const params = useParams();
-    const interviewId = params?.interviewId; // Fixed: Define interviewId from params
+    const interviewID = params?.interviewId; // Fixed: Define interviewId from params
 
     console.log(params);
 
-    useEffect(() => {
-        if (interviewId) {
-            fetchData();
-        }
-    }, [interviewId]); // Simplified: removed isRouterReady state
+    // Simplified: removed isRouterReady state
 
-    const fetchData = async () => {
+    const fetchData = async (interviewID) => {
         try {
             setLoading(true);
             setError(null);
-            console.log("Fetching interview data for ID:", interviewId);
+            console.log("Fetching interview data for ID:", interviewID);
 
             const result = await db.select()
                 .from(MockInterview)
-                .where(eq(MockInterview.mockId, interviewId));
-
+                .where(eq(MockInterview.mockId, interviewID));
+            console.log("result => ", result)
             if (result.length === 0) {
                 throw new Error("No interview found with this ID");
             }
@@ -195,11 +191,17 @@ function StartInterview() {
     };
     console.log("Above of loading");
 
+    useEffect(() => {
+        fetchData(interviewID);
+    }, [interviewID]);
+
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
     console.log("Below of loading");
 
     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
     if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
+
+
 
     return (
         <div className="p-4">
@@ -212,11 +214,11 @@ function StartInterview() {
                     onQuestion={handleQuestionClick}
                 />
 
-                {/* <RecaurdAnswer
+                <RecaurdAnswer
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     interviewData={interviewData}
-                /> */}
+                />
             </div>
         </div>
     );
