@@ -149,14 +149,18 @@ function StartInterview() {
     // Simplified: removed isRouterReady state
 
     const fetchData = async (interviewID) => {
+        console.log("Fetching interview data for ID:", interviewID);
+
         try {
             setLoading(true);
             setError(null);
             console.log("Fetching interview data for ID:", interviewID);
 
-            const result = await db.select()
-                .from(MockInterview)
-                .where(eq(MockInterview.mockId, interviewID));
+            // const result = await db.select()
+            //     .from(MockInterview)
+            //     .where(eq(MockInterview.mockId, interviewID));
+            const result = await db.select().from(MockInterview).where(eq(MockInterview.mockId, interviewID));
+
             console.log("result => ", result)
             if (result.length === 0) {
                 throw new Error("No interview found with this ID");
@@ -192,7 +196,10 @@ function StartInterview() {
     console.log("Above of loading");
 
     useEffect(() => {
-        fetchData(interviewID);
+        if (interviewID) {
+
+            fetchData(interviewID);
+        }
     }, [interviewID]);
 
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
