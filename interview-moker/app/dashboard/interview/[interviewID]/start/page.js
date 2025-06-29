@@ -193,7 +193,7 @@ function StartInterview() {
     const handleQuestionClick = (index) => {
         setActiveIndex(index);
     };
-    console.log("Above of loading");
+    console.log("Above of  loading is working");
 
     useEffect(() => {
         if (interviewID) {
@@ -203,7 +203,7 @@ function StartInterview() {
     }, [interviewID]);
 
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
-    console.log("Below of loading");
+    console.log("Below of loading is working");
 
     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
     if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
