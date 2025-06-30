@@ -37,8 +37,7 @@ const NewInterview = () => {
 
         const rawText = await result.response.text();
         // console.log("Raw Gemini response:\n", rawText);
-        // console.log("Raw Gemini response:\n", rawText);
-        // console.log("Raw Gemini response:\n", rawText);
+
 
         const MockjsonResp = rawText.replace('```json', '').replace('```', '');
 
