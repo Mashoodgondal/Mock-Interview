@@ -13,7 +13,7 @@ const HeaderDashboard = () => {
 
     return (
         <div>
-            <nav className="sticky shadow-sm bg-white">
+            <nav className="sticky shadow-sm bg-transparent">
                 <div className="max-w-screen-xl flex items-center justify-between px-4 py-3 mx-auto">
 
                     <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">
