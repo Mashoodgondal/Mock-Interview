@@ -80,15 +80,18 @@ const MeshBackground = ({ children }) => {
                     scale: 1.0,
                     scaleMobile: 1.0,
 
-                    // ✨ Dark-mode optimized visual style
-                    color: 0x38bdf8,             // Electric blue mesh lines
-                    backgroundColor: 0x0f172a,   // Deep slate (dark background)
-                    points: 12.0,                // More mesh points for denser look
-                    maxDistance: 20.0,           // Tighter net
-                    spacing: 16.0,               // Slightly reduced spacing
-                    showDots: false,             // Cleaner design without dots
-                    opacity: 0.3,                // Subtle net appearance
+                    // Colors
+                    color: 0x38bdf8,              // Sky blue
+                    backgroundColor: 0x0f172a,    // Dark background
+
+                    // Mesh appearance
+                    points: 8.0,                  // Fewer points = larger spacing between them
+                    maxDistance: 22.0,            // Connection distance
+                    spacing: 20.0,                // Wider spacing = dots stand out more
+                    showDots: true,               // Enable dots
+                    opacity: 0.35,                // Semi-transparent lines
                 })
+
 
             );
         }
