@@ -7,8 +7,8 @@ import React, { useEffect } from 'react';
 import { UserButton } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
-import img from '../../../public/logo.jpeg'
+// import Image from 'next/image';
+// import img from '../../../public/logo.jpeg'
 
 const HeaderDashboard = () => {
     const path = usePathname();
@@ -20,10 +20,10 @@ const HeaderDashboard = () => {
     return (
         <div className='flex flex-row items-center justify-between bg-transparent p-4'>
             <Link href='/'>
-                <Image src={img} />
-                {/* <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">
+                {/* <Image src={img} alt='logo' width={20} height={200} /> */}
+                <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">
                     Skill<span className="bg-gradient-to-r from-purple-400 to-cyan-600 bg-clip-text text-transparent">Verge</span>
-                </h2> */}
+                </h2>
             </Link>
 
             <ul className="hidden md:flex gap-6">
