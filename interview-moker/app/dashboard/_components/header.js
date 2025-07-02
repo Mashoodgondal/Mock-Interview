@@ -1,5 +1,8 @@
+
+
+
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoMdMenu } from "react-icons/io";
 import { RiCloseCircleFill } from "react-icons/ri";
 import { usePathname } from "next/navigation";
@@ -8,14 +11,21 @@ import { UserButton } from "@clerk/nextjs";
 
 const HeaderDashboard = () => {
     const path = usePathname();
-    const [nav, setnav] = useState(false);
-    const handleNave = () => setnav(!nav);
+    const [nav, setNav] = useState(false);
+    const handleNav = () => setNav(!nav);
+
+    const menuItems = [
+        { label: "Dashboard", href: "/dashboard" },
+        { label: "Questions", href: "/question" },
+        { label: "Upgrade", href: "/upgrade" },
+        { label: "How it works?", href: "/how" },
+    ];
 
     return (
-        <div>
-            <nav className="sticky shadow-sm bg-transparent">
+        <div className="w-full">
+            <nav className="sticky top-0 shadow-sm bg-white dark:bg-gray-900 z-50">
                 <div className="max-w-screen-xl flex items-center justify-between px-4 py-3 mx-auto">
-
+                    {/* Logo */}
                     <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">
                         Skill
                         <span className="bg-gradient-to-r from-purple-400 to-cyan-600 bg-clip-text text-transparent">
@@ -23,18 +33,13 @@ const HeaderDashboard = () => {
                         </span>
                     </h2>
 
-
-                    <ul className="hidden md:flex flex-1 justify-center font-bold space-x-12 text-sm">
-                        {[
-                            { label: "Dashboard", href: "/dashboard" },
-                            { label: "Questions", href: "/question" },
-                            { label: "Upgrade", href: "/upgrade" },
-                            { label: "How it works?", href: "/how" },
-                        ].map((item) => (
+                    {/* Desktop Menu */}
+                    <ul className="hidden md:flex flex-1 justify-center font-bold space-x-12 text-sm text-gray-700 dark:text-gray-300">
+                        {menuItems.map((item) => (
                             <Link key={item.href} href={item.href}>
                                 <li
                                     className={`hover:text-blue-400 transition-all cursor-pointer ${path === item.href
-                                        ? "text-indigo-400 font-bold"
+                                        ? "text-indigo-500 dark:text-indigo-400 font-bold"
                                         : ""
                                         }`}
                                 >
@@ -44,39 +49,27 @@ const HeaderDashboard = () => {
                         ))}
                     </ul>
 
-
+                    {/* Right Controls */}
                     <div className="flex items-center space-x-4">
-
                         <div className="hidden md:block">
                             <UserButton />
                         </div>
-
-
-                        <div onClick={handleNave} className="md:hidden cursor-pointer">
-                            {nav ? (
-                                <RiCloseCircleFill size={30} />
-                            ) : (
-                                <IoMdMenu size={25} />
-                            )}
+                        <div onClick={handleNav} className="md:hidden cursor-pointer text-gray-700 dark:text-gray-300">
+                            {nav ? <RiCloseCircleFill size={30} /> : <IoMdMenu size={25} />}
                         </div>
                     </div>
                 </div>
             </nav>
 
-
+            {/* Mobile Menu */}
             {nav && (
-                <div className="md:hidden p-6 w-full bg-transparent border-t border-gray-200">
-                    <ul className="flex flex-col space-y-4 font-bold text-gray-700">
-                        {[
-                            { label: "Dashboard", href: "/dashboard" },
-                            { label: "Questions", href: "/question" },
-                            { label: "Upgrade", href: "/upgrade" },
-                            { label: "How it works?", href: "/how" },
-                        ].map((item) => (
+                <div className="md:hidden px-6 py-4 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                    <ul className="flex flex-col space-y-4 font-bold text-gray-700 dark:text-gray-300">
+                        {menuItems.map((item) => (
                             <Link key={item.href} href={item.href}>
                                 <li
                                     className={`hover:text-blue-400 transition-all cursor-pointer ${path === item.href
-                                        ? "text-indigo-400 font-bold"
+                                        ? "text-indigo-500 dark:text-indigo-400 font-bold"
                                         : ""
                                         }`}
                                 >
@@ -85,8 +78,7 @@ const HeaderDashboard = () => {
                             </Link>
                         ))}
 
-
-                        <div className="pt-4 border-t border-gray-300">
+                        <div className="pt-4 border-t border-gray-300 dark:border-gray-700">
                             <UserButton />
                         </div>
                     </ul>
@@ -97,6 +89,3 @@ const HeaderDashboard = () => {
 };
 
 export default HeaderDashboard;
-
-
-
