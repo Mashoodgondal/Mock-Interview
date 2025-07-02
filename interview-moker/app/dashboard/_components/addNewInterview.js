@@ -77,10 +77,26 @@ const NewInterview = () => {
         <div>
             <div
                 onClick={() => setOpen(true)}
+                className="group p-10 border-2 rounded-2xl bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-blue-900 dark:via-slate-900 dark:to-blue-950 border-blue-300 dark:border-blue-700 
+             hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer text-center flex flex-col items-center justify-center"
+            >
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-800 text-blue-600 dark:text-blue-300 group-hover:scale-110 transition-transform duration-300 shadow-md">
+                    <span className="text-3xl font-bold">+</span>
+                </div>
+                <h2 className="mt-4 text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 tracking-wide">
+                    Add New Interview
+                </h2>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Start a new AI-powered interview session
+                </p>
+            </div>
+
+            {/* <div
+                onClick={() => setOpen(true)}
                 className='p-10 border-2 border-dashed border-blue-300 rounded-xl bg-blue-100 dark:bg-blue-900 dark:border-blue-500 hover:scale-105 hover:shadow-md cursor-pointer transition-all'
             >
                 <h2 className='text-lg text-center text-gray-900 dark:text-gray-100'>Add New +</h2>
-            </div>
+            </div> */}
 
             {open && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">

@@ -6,8 +6,8 @@ const Dashboard = () => {
   return (
 
     <div className="p-10 bg-transparent min-h-screen">
-      <h1 className="font-bold text-2xl text-gray-900 dark:text-white">Dashboard</h1>
-      <h2 className="text-gray-700 dark:text-gray-300">Create and start your AI Interview</h2>
+      <h1 className="font-bold text-2xl text-gray-900 dark:text-amber-200">Dashboard</h1>
+      <h2 className="text-gray-700 dark:text-amber-100">Create and start your AI Interview</h2>
 
       <div className="mt-3 grid grid-cols-1 md:grid-cols-3">
         <NewInterview />
