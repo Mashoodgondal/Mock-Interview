@@ -23,7 +23,7 @@ const HeaderDashboard = () => {
 
     return (
         <div className="w-full">
-            <nav className="sticky top-0 shadow-sm  dark:transparent z-50">
+            <nav className="sticky top-0 shadow-sm  dark:bg-gray-400/50 z-50">
                 <div className="max-w-screen-xl flex items-center justify-between px-4 py-3 mx-auto">
                     {/* Logo */}
                     <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">
@@ -34,7 +34,7 @@ const HeaderDashboard = () => {
                     </h2>
 
                     {/* Desktop Menu */}
-                    <ul className="hidden md:flex flex-1 justify-center font-bold space-x-12 text-sm text-gray-700 dark:text-gray-300">
+                    <ul className="hidden md:flex flex-1 justify-center font-bold space-x-12 text-sm text-amber-100 dark:text-amber-100">
                         {menuItems.map((item) => (
                             <Link key={item.href} href={item.href}>
                                 <li
@@ -63,7 +63,9 @@ const HeaderDashboard = () => {
 
             {/* Mobile Menu */}
             {nav && (
-                <div className="md:hidden px-6 py-4 w-full bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                // <div className="md:hidden px-6 py-4 w-full bg-white dark:bg-gray-500 bg- border-t border-gray-200 dark:border-gray-700">
+                <div className="md:hidden px-6 py-4 w-full bg-white/70 dark:bg-gray-500/50 border-t border-gray-200 dark:border-gray-700"
+                >
                     <ul className="flex flex-col space-y-4 font-bold text-gray-700 dark:text-gray-300">
                         {menuItems.map((item) => (
                             <Link key={item.href} href={item.href}>
