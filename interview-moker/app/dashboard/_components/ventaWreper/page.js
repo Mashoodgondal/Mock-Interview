@@ -43,9 +43,14 @@ const MeshBackground = ({ children }) => {
     }, [vantaEffect]);
 
     return (
-        <div ref={vantaRef} className="min-h-screen w-full relative overflow-hidden">
-            <div className="absolute inset-0 z-10">{children}</div>
+        <div ref={vantaRef} className="min-h-screen w-full relative">
+            <div className="absolute inset-0 -z-10"></div>
+            <div className="relative z-10">{children}</div>
         </div>
+
+        // <div ref={vantaRef} className="min-h-full w-full relative">
+        //     <div className="absolute inset-0 z-10">{children}</div>
+        // </div>
     );
 };
 

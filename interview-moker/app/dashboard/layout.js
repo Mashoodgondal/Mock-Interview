@@ -14,8 +14,8 @@ const Dashboardlayout = ({ children }) => {
         {children}
 
 
+        <Footer />
       </MeshBackground>
-      <Footer />
     </div>
   )
 }
