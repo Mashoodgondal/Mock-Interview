@@ -14,22 +14,22 @@ const MeshBackground = ({ children }) => {
                 NET({
                     el: vantaRef.current,
                     THREE,
-                    mouseControls: true,
+                    mouseControls: false,
                     touchControls: true,
-                    gyroControls: false,
-                    minHeight: 200.0,
-                    minWidth: 200.0,
+                    gyroControls: true,
+                    minHeight: 300.0,
+                    minWidth: 300.0,
                     scale: 1.0,
                     scaleMobile: 1.0,
 
                     // Professional cool-toned colors for dark mode
                     color: 0x7dd3fc,              // Soft sky blue dots/lines
                     backgroundColor: 0x0f172a,    // Dark slate background
-                    points: 12.0,                 // Denser dot count for subtle mesh
-                    maxDistance: 25.0,           // More connected mesh feel
-                    spacing: 18.0,               // Slightly tighter mesh
+                    points: 22.0,                 // Denser dot count for subtle mesh
+                    maxDistance: 5.0,           // More connected mesh feel
+                    spacing: 8.0,               // Slightly tighter mesh
                     showDots: true,
-                    opacity: 0.6,                // More visible lines but not overwhelming
+                    opacity: 0.4,                // More visible lines but not overwhelming
                 })
 
 
