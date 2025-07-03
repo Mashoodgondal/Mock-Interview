@@ -58,7 +58,7 @@ const Interview = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-500/70 py-12 px-4 sm:px-6 lg:px-8 mb-20 pb-10 rounded-2xl">
+        <div className="min-h-screen bg-gray-500/70 py-12 px-4 sm:px-6 lg:px-8 mb-20 pb-10">
             <div className="max-w-6xl mx-auto">
                 <div className="text-center mb-12">
                     <h1 className="text-3xl font-extrabold text-amber-200 sm:text-4xl">
@@ -121,7 +121,7 @@ const Interview = () => {
 
 
 
-                    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col">
+                    <div className="bg-white dark:bg-gray-800/50 p-6 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 flex flex-col">
                         <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Video Setup</h2>
 
                         {webcamEnable ? (
@@ -173,7 +173,7 @@ const Interview = () => {
 
 
 
-                    {Error && (
+                    {/* {Error && (
                         <div className="w-full max-w-md p-3 bg-red-50 text-red-600 rounded-lg">
                             {Error}
                         </div>
@@ -182,7 +182,7 @@ const Interview = () => {
                         <div className="w-full max-w-md p-2 bg-green-50 text-green-600 rounded-lg">
                             Microphone enabled successfully
                         </div>
-                    )}
+                    )} */}
                 </div>
                 {/* )}
                     </div> */}
