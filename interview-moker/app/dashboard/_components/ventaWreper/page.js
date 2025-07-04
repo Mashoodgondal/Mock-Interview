@@ -14,9 +14,9 @@ const MeshBackground = ({ children }) => {
                 NET({
                     el: vantaRef.current,
                     THREE,
-                    mouseControls: false,
+                    mouseControls: true,
                     touchControls: true,
-                    gyroControls: true,
+                    gyroControls: false,
                     minHeight: 300.0,
                     minWidth: 300.0,
                     scale: 1.0,
@@ -48,9 +48,6 @@ const MeshBackground = ({ children }) => {
             <div className="relative z-10">{children}</div>
         </div>
 
-        // <div ref={vantaRef} className="min-h-full w-full relative">
-        //     <div className="absolute inset-0 z-10">{children}</div>
-        // </div>
     );
 };
 
