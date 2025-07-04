@@ -22,14 +22,14 @@ const MeshBackground = ({ children }) => {
                     scale: 1.0,
                     scaleMobile: 1.0,
 
-                    // Professional cool-toned colors for dark mode
-                    color: 0x7dd3fc,              // Soft sky blue dots/lines
-                    backgroundColor: 0x0f172a,    // Dark slate background
-                    points: 22.0,                 // Denser dot count for subtle mesh
-                    maxDistance: 5.0,           // More connected mesh feel
-                    spacing: 8.0,               // Slightly tighter mesh
+
+                    color: 0x7dd3fc,
+                    backgroundColor: 0x0f172a,
+                    points: 22.0,
+                    maxDistance: 5.0,
+                    spacing: 8.0,
                     showDots: true,
-                    opacity: 0.4,                // More visible lines but not overwhelming
+                    opacity: 0.4,
                 })
 
 
