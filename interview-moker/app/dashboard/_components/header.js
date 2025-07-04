@@ -23,7 +23,7 @@ const HeaderDashboard = () => {
 
     return (
         <div className="w-full">
-            <nav className="sticky top-0 shadow-sm  dark:bg-gray-400/50 z-50">
+            <nav className="sticky top-0 shadow-sm  dark:bg-gray-400/30 z-50">
                 <div className="max-w-screen-xl flex items-center justify-between px-4 py-3 mx-auto">
                     {/* Logo */}
                     <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-600 bg-clip-text text-transparent tracking-wide">

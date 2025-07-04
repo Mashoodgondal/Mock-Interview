@@ -172,32 +172,8 @@ const Interview = () => {
 
 
 
-
-                    {/* {Error && (
-                        <div className="w-full max-w-md p-3 bg-red-50 text-red-600 rounded-lg">
-                            {Error}
-                        </div>
-                    )}
-                    {micEnable && (
-                        <div className="w-full max-w-md p-2 bg-green-50 text-green-600 rounded-lg">
-                            Microphone enabled successfully
-                        </div>
-                    )} */}
                 </div>
-                {/* )}
-                    </div> */}
-                {/* </div>  */}
 
-                {/* Start Interview Button */}
-                {/* <div className="mt-10 flex justify-end">
-                    <Link href={'/dashboard/interview/' + interviewId + '/start'}>
-                        <LocalButton
-                            title="Start Interview Now"
-                            className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-sm transition-colors"
-                            disabled={!webcamEnable}
-                        />
-                    </Link>
-                </div> */}
                 <div className="mt-10 flex justify-end">
                     <Link href={'/dashboard/interview/' + interviewId + '/start'}>
                         <LocalButton
