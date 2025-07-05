@@ -36,22 +36,23 @@ const NewInterview = () => {
 
 
         const rawText = await result.response.text();
-        console.log("Raw Gemini response:\n", rawText);
+        // console.log("Raw Gemini response:\n", rawText);
 
 
         const MockjsonResp = rawText.replace('```json', '').replace('```', '');
-        setjsonResp(MockjsonResp);
-        // let parsedJson;
-        // try {
-        //     parsedJson = JSON.parse(MockjsonResp);
-        //     console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
-        //     setjsonResp(MockjsonResp);
-        // } catch (err) {
-        //     console.error("Failed to parse JSON response:", err);
-        //     alert("Invalid response format. Please try again.");
-        //     setloading(false);
-        //     return;
-        // }
+        // setjsonResp(MockjsonResp);
+        // console.log(MockjsonResp)
+        let parsedJson;
+        try {
+            parsedJson = JSON.parse(MockjsonResp);
+            console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
+            setjsonResp(MockjsonResp);
+        } catch (err) {
+            console.error("Failed to parse JSON response:", err);
+            alert("Invalid response format. Please try again.");
+            setloading(false);
+            return;
+        }
 
 
         const newMockid = uuidv4();
@@ -148,8 +149,8 @@ const NewInterview = () => {
                                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Experience (Years)*</label>
                                     <input
                                         type="number"
-                                        min="0"
-                                        max="30"
+                                        min={0}
+                                        max={20}
                                         required
                                         placeholder="5"
                                         onChange={(e) => setjobExperience(e.target.value)}
