@@ -36,22 +36,22 @@ const NewInterview = () => {
 
 
         const rawText = await result.response.text();
-        // console.log("Raw Gemini response:\n", rawText);
+        console.log("Raw Gemini response:\n", rawText);
 
 
         const MockjsonResp = rawText.replace('```json', '').replace('```', '');
-
-        let parsedJson;
-        try {
-            parsedJson = JSON.parse(MockjsonResp);
-            console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
-            setjsonResp(MockjsonResp);
-        } catch (err) {
-            console.error("Failed to parse JSON response:", err);
-            alert("Invalid response format. Please try again.");
-            setloading(false);
-            return;
-        }
+        setjsonResp(MockjsonResp);
+        // let parsedJson;
+        // try {
+        //     parsedJson = JSON.parse(MockjsonResp);
+        //     console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
+        //     setjsonResp(MockjsonResp);
+        // } catch (err) {
+        //     console.error("Failed to parse JSON response:", err);
+        //     alert("Invalid response format. Please try again.");
+        //     setloading(false);
+        //     return;
+        // }
 
 
         const newMockid = uuidv4();
