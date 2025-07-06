@@ -139,8 +139,10 @@ import { MockInterview } from "../../../../../utils/schema";
 import { eq } from "drizzle-orm";
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation";
-import QuestionSection from "./_components/questionSection";
+// import QuestionSection from "./_components/questionSection";
+
 import RecaurdAnswer from "./_components/recaurdAnswer";
+import QuestionSection from "./_components/questionSection";
 // import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 
@@ -241,10 +243,10 @@ function StartInterview() {
 
 
 
-    const handleQuestionClick = (index) => {
-        setActiveIndex(index);
-    };
-    console.log("Above of  loading is working");
+    // const handleQuestionClick = (index) => {
+    //     setActiveIndex(index);
+    // };
+    // console.log("Above of  loading is working");
 
     useEffect(() => {
         if (interviewID) {
@@ -257,13 +259,13 @@ function StartInterview() {
     console.log("Below of loading is working");
 
 
-    if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
-    // if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
-    if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
-        return <div className="p-4 text-red-500">
-            No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
-        </div>;
-    }
+    // if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+    // // if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
+    // if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
+    //     return <div className="p-4 text-red-500">
+    //         No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
+    //     </div>;
+    // }
 
 
 
@@ -271,13 +273,14 @@ function StartInterview() {
     return (
         <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <QuestionSection
+                {/* <QuestionSection
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     isLoading={loading}
                     error={error}
                     onQuestion={handleQuestionClick}
-                />
+                /> */}
+                <QuestionSection />
 
                 <RecaurdAnswer
                     questions={mockInterviewQuestions}
