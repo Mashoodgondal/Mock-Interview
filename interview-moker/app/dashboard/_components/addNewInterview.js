@@ -29,49 +29,152 @@ const NewInterview = () => {
 
         setloading(true);
 
-        const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Include 'question' and 'answer' fields.`;
+        const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format as an array of objects. Each object should have 'question' and 'answer' fields. Return only valid JSON array without any markdown formatting.`;
 
-
-        const result = await chatSession.sendMessage(InputPrompt);
-
-
-        const rawText = await result.response.text();
-        // console.log("Raw Gemini response:\n", rawText);
-
-
-        const MockjsonResp = rawText.replace('```json', '').replace('```', '');
-        // setjsonResp(MockjsonResp);
-        // console.log(MockjsonResp)
-        let parsedJson;
         try {
-            parsedJson = JSON.parse(MockjsonResp);
-            console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
-            setjsonResp(MockjsonResp);
-        } catch (err) {
-            console.error("Failed to parse JSON response:", err);
-            alert("Invalid response format. Please try again.");
+            const result = await chatSession.sendMessage(InputPrompt);
+            const rawText = await result.response.text();
+            console.log("Raw Gemini response:\n", rawText);
+
+            // More robust JSON cleaning
+            let cleanedJson = rawText.trim();
+
+            // Remove markdown code blocks
+            cleanedJson = cleanedJson.replace(/```json\s*/g, '');
+            cleanedJson = cleanedJson.replace(/```\s*/g, '');
+
+            // Remove any leading/trailing whitespace
+            cleanedJson = cleanedJson.trim();
+
+            // Ensure it starts with [ and ends with ]
+            if (!cleanedJson.startsWith('[')) {
+                // If it doesn't start with [, try to find the JSON array
+                const jsonStart = cleanedJson.indexOf('[');
+                if (jsonStart !== -1) {
+                    cleanedJson = cleanedJson.substring(jsonStart);
+                }
+            }
+
+            if (!cleanedJson.endsWith(']')) {
+                // If it doesn't end with ], try to find the end of JSON array
+                const jsonEnd = cleanedJson.lastIndexOf(']');
+                if (jsonEnd !== -1) {
+                    cleanedJson = cleanedJson.substring(0, jsonEnd + 1);
+                }
+            }
+
+            console.log("Cleaned JSON:", cleanedJson);
+
+            let parsedJson;
+            try {
+                parsedJson = JSON.parse(cleanedJson);
+
+                // Validate the parsed JSON structure
+                if (!Array.isArray(parsedJson)) {
+                    throw new Error("Response is not an array");
+                }
+
+                if (parsedJson.length === 0) {
+                    throw new Error("No questions found in response");
+                }
+
+                // Validate each question object
+                for (let i = 0; i < parsedJson.length; i++) {
+                    const item = parsedJson[i];
+                    if (!item.question || !item.answer) {
+                        throw new Error(`Question ${i + 1} is missing 'question' or 'answer' field`);
+                    }
+                }
+
+                console.log("Parsed questions/answers:", parsedJson);
+
+            } catch (parseError) {
+                console.error("Failed to parse JSON response:", parseError);
+                console.error("Cleaned JSON that failed:", cleanedJson);
+                alert("Invalid response format from AI. Please try again.");
+                setloading(false);
+                return;
+            }
+
+            const newMockid = uuidv4();
+
+            // Store the cleaned JSON string
+            await db.insert(MockInterview).values({
+                mockId: newMockid,
+                jsonMockResp: cleanedJson, // Store the cleaned JSON
+                jobPosition,
+                jobDesc: jobDescription,
+                jobExperience,
+                createdBy: user?.primaryEmailAddress?.emailAddress,
+                createdAt: moment().format('DD-MM-YYYY')
+            }).returning({ mockId: MockInterview.mockId });
+
+            router.push(`dashboard/interview/${newMockid}`);
+            setOpen(false);
+
+        } catch (error) {
+            console.error("Error in SubmitHandler:", error);
+            alert("An error occurred while generating questions. Please try again.");
+        } finally {
             setloading(false);
-            return;
         }
-
-
-        const newMockid = uuidv4();
-
-        await db.insert(MockInterview).values({
-            mockId: newMockid,
-            jsonMockResp: MockjsonResp,
-            jobPosition,
-            jobDesc: jobDescription,
-            jobExperience,
-            createdBy: user?.primaryEmailAddress?.emailAddress,
-            createdAt: moment().format('DD-MM-YYYY')
-        }).returning({ mockId: MockInterview.mockId });
-        router.push(`dashboard/interview/${newMockid}`);
-        setOpen(false);
-
-
-        setloading(false);
     };
+
+
+
+    // const SubmitHandler = async (e) => {
+    //     e.preventDefault();
+
+    //     if (!jobPosition || !jobDescription || !jobExperience) {
+    //         alert("Please fill in all the fields: Job Position, Description, and Experience.");
+    //         return;
+    //     }
+
+    //     setloading(true);
+
+    //     const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Include 'question' and 'answer' fields.`;
+
+
+    //     const result = await chatSession.sendMessage(InputPrompt);
+
+
+    //     const rawText = await result.response.text();
+    //     // console.log("Raw Gemini response:\n", rawText);
+
+
+    //     const MockjsonResp = rawText.replace('```json', '').replace('```', '');
+    //     // setjsonResp(MockjsonResp);
+    //     // console.log(MockjsonResp)
+    //     let parsedJson;
+    //     try {
+    //         parsedJson = JSON.parse(MockjsonResp);
+    //         console.log("Parsed questions/answers:", parsedJson); // ✅ See array in terminal
+    //         setjsonResp(MockjsonResp);
+    //     } catch (err) {
+    //         console.error("Failed to parse JSON response:", err);
+    //         alert("Invalid response format. Please try again.");
+    //         setloading(false);
+    //         return;
+    //     }
+
+
+    //     const newMockid = uuidv4();
+
+    //     await db.insert(MockInterview).values({
+    //         mockId: newMockid,
+    //         jsonMockResp: MockjsonResp,
+    //         jobPosition,
+    //         jobDesc: jobDescription,
+    //         jobExperience,
+    //         createdBy: user?.primaryEmailAddress?.emailAddress,
+    //         createdAt: moment().format('DD-MM-YYYY')
+    //     }).returning({ mockId: MockInterview.mockId });
+    //     router.push(`dashboard/interview/${newMockid}`);
+    //     setOpen(false);
+
+
+    //     setloading(false);
+    // };
 
 
     return (

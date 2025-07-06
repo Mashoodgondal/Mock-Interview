@@ -148,47 +148,129 @@ function StartInterview() {
 
     // Simplified: removed isRouterReady state
 
+    // const fetchData = async (interviewID) => {
+    //     console.log("Fetching interview data for ID:", interviewID);
+
+    //     try {
+    //         setLoading(true);
+    //         setError(null);
+    //         console.log("Fetching interview data for ID:", interviewID);
+
+    //         // const result = await db.select()
+    //         //     .from(MockInterview)
+    //         //     .where(eq(MockInterview.mockId, interviewID));
+    //         const result = await db.select().from(MockInterview).where(eq(MockInterview.mockId, interviewID));
+
+    //         console.log("result => ", result)
+    //         if (result.length === 0) {
+    //             throw new Error("No interview found with this ID");
+    //         }
+
+    //         let questions;
+    //         try {
+    //             const rawData = result[0].jsonMockResp;
+    //             questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+
+    //             if (!Array.isArray(questions)) {
+    //                 throw new Error("Questions data is not in expected array format");
+    //             }
+    //         } catch (parseError) {
+    //             console.error("Parsing error:", parseError);
+    //             throw new Error("Failed to parse interview questions");
+    //         }
+
+    //         setMockInterviewQuestions(questions);
+    //         console.log("results are", result);
+    //         setInterviewData(result[0]);
+    //     } catch (err) {
+    //         console.error("Fetch error:", err);
+    //         setError(err.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
+
     const fetchData = async (interviewID) => {
         console.log("Fetching interview data for ID:", interviewID);
 
         try {
             setLoading(true);
             setError(null);
-            console.log("Fetching interview data for ID:", interviewID);
 
-            // const result = await db.select()
-            //     .from(MockInterview)
-            //     .where(eq(MockInterview.mockId, interviewID));
-            const result = await db.select().from(MockInterview).where(eq(MockInterview.mockId, interviewID));
+            const result = await db.select()
+                .from(MockInterview)
+                .where(eq(MockInterview.mockId, interviewID));
 
-            console.log("result => ", result)
+            console.log("Database result:", result);
+
             if (result.length === 0) {
                 throw new Error("No interview found with this ID");
             }
 
-            let questions;
-            try {
-                const rawData = result[0].jsonMockResp;
-                questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+            const interviewRecord = result[0];
+            console.log("Interview record:", interviewRecord);
 
-                if (!Array.isArray(questions)) {
-                    throw new Error("Questions data is not in expected array format");
-                }
-            } catch (parseError) {
-                console.error("Parsing error:", parseError);
-                throw new Error("Failed to parse interview questions");
+            // Check if jsonMockResp exists and is not empty
+            if (!interviewRecord.jsonMockResp) {
+                throw new Error("No questions data found in this interview record");
             }
 
+            let questions;
+            try {
+                const rawData = interviewRecord.jsonMockResp;
+                console.log("Raw JSON data:", rawData);
+
+                // Parse the JSON
+                questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+                console.log("Parsed questions:", questions);
+
+                // Validate the structure
+                if (!Array.isArray(questions)) {
+                    console.error("Questions data is not an array:", questions);
+                    throw new Error("Questions data is not in expected array format");
+                }
+
+                if (questions.length === 0) {
+                    throw new Error("No questions found in the data");
+                }
+
+                // Validate each question has required fields
+                for (let i = 0; i < questions.length; i++) {
+                    const question = questions[i];
+                    if (!question.question || !question.answer) {
+                        console.error(`Question ${i + 1} is invalid:`, question);
+                        throw new Error(`Question ${i + 1} is missing required fields`);
+                    }
+                }
+
+            } catch (parseError) {
+                console.error("JSON parsing error:", parseError);
+                console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
+                throw new Error("Failed to parse interview questions. The data may be corrupted.");
+            }
+
+            // Set the data
             setMockInterviewQuestions(questions);
-            console.log("results are", result);
-            setInterviewData(result[0]);
+            setInterviewData(interviewRecord);
+
+            console.log("Successfully loaded questions:", questions);
+
         } catch (err) {
             console.error("Fetch error:", err);
             setError(err.message);
+
+            // Clear the questions state on error
+            setMockInterviewQuestions([]);
+
         } finally {
             setLoading(false);
         }
     };
+
+
+
 
     const handleQuestionClick = (index) => {
         setActiveIndex(index);
