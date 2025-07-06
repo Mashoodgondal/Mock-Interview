@@ -1,6 +1,6 @@
 import React from 'react'
 import NewInterview from './_components/addNewInterview'
-import MeshBackground from './_components/ventaWreper/page'
+
 
 const Dashboard = () => {
   return (
