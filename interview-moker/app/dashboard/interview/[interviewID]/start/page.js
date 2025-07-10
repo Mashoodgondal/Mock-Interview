@@ -207,6 +207,7 @@ function StartInterview() {
                     throw new Error("No questions found in the data");
                 }
 
+
                 // Validate each question has required fields
                 for (let i = 0; i < questions.length; i++) {
                     const question = questions[i];

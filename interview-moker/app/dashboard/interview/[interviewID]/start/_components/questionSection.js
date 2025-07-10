@@ -80,7 +80,7 @@ import React from 'react'
 const QuestionSection = () => {
     return (
         <div>questionSection
-            here is queston section to that is noly see for testing
+            here is queston section to that is only see for testing
         </div>
     )
 }
