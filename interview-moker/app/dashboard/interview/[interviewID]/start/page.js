@@ -258,8 +258,8 @@ function StartInterview() {
 
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
     console.log("Below of loading is working");
-    console.log("Raw interview record:", interviewRecord);
-    console.log("jsonMockResp:", interviewRecord.jsonMockResp);
+
+
 
 
     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;

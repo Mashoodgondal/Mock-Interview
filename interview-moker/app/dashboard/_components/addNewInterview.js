@@ -100,7 +100,8 @@ const NewInterview = () => {
             try {
                 parsedJson = JSON.parse(MockjsonResp);
                 // console.log("Parsed questions/answers:", parsedJson);
-                setjsonResp(MockjsonResp);
+                // setjsonResp(MockjsonResp);
+                setjsonResp(parsedJson);
                 console.log("json response", MockjsonResp)
 
             } catch (err) {
