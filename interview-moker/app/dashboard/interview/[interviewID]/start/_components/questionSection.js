@@ -78,14 +78,14 @@
 import React from 'react';
 
 function QuestionsSection({ questions, activeIndex, onQuestion }) {
-    const textToSpeech = (text) => {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert('Sorry, your browser does not support text-to-speech.');
-        }
-    };
+    // const textToSpeech = (text) => {
+    //     if ('speechSynthesis' in window) {
+    //         const utterance = new SpeechSynthesisUtterance(text);
+    //         window.speechSynthesis.speak(utterance);
+    //     } else {
+    //         alert('Sorry, your browser does not support text-to-speech.');
+    //     }
+    // };
 
     return (
         <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">

@@ -99,8 +99,10 @@ const NewInterview = () => {
             let parsedJson;
             try {
                 parsedJson = JSON.parse(MockjsonResp);
-                console.log("Parsed questions/answers:", parsedJson);
+                // console.log("Parsed questions/answers:", parsedJson);
                 setjsonResp(MockjsonResp);
+                console.log("json response", MockjsonResp)
+
             } catch (err) {
                 console.error("Failed to parse JSON response:", err);
                 alert("Invalid response format from AI. Please try again.");
