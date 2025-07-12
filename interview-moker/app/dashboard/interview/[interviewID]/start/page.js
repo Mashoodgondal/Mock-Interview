@@ -400,23 +400,7 @@ export default StartInterview; */}
 
 
 
-{/* <div className="flex justify-end gap-6 mt-6">
-#                 {activeIndex > 0 && (
-#                     <Button onClick={() => setActiveIndex(activeIndex - 1)}>
-#                         Previous Question
-#                     </Button>
-#                 )}
-#                 {activeIndex !== mockInterviewQuestions?.length - 1 && (
-#                     <Button onClick={() => setActiveIndex(activeIndex + 1)}>
-#                         Next Question
-#                     </Button>
-#                 )}
-#                 {activeIndex === mockInterviewQuestions?.length - 1 && (
-#                     <Link href={'/dashboard/interview/' + interviewData?.mockId + "/feedback"}>
-#                         <Button>End Interview</Button>
-#                     </Link>
-#                 )}
-#             </div> */}
+
 
 
 
