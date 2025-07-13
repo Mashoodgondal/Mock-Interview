@@ -287,21 +287,12 @@ function StartInterview() {
 
 
 
-                {/* <QuestionSection
-                    questions={mockInterviewQuestions}
-                    activeIndex={activeIndex}
-                    isLoading={loading}
-                    error={error}
-                    onQuestion={handleQuestionClick}
-                /> */}
-
-                {/* <QuestionSection /> */}
-
                 <RecaurdAnswer
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     interviewData={interviewData}
                 />
+
             </div>
         </div>
     );

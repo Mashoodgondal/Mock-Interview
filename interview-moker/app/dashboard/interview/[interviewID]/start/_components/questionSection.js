@@ -75,17 +75,18 @@
 
 
 // import { Volume2 } from 'lucide-react';
+// const textToSpeech = (text) => {
+//     if ('speechSynthesis' in window) {
+//         const utterance = new SpeechSynthesisUtterance(text);
+//         window.speechSynthesis.speak(utterance);
+//     } else {
+//         alert('Sorry, your browser does not support text-to-speech.');
+//     }
+// };
 import React from 'react';
 
 function QuestionsSection({ questions, activeIndex, onQuestion }) {
-    // const textToSpeech = (text) => {
-    //     if ('speechSynthesis' in window) {
-    //         const utterance = new SpeechSynthesisUtterance(text);
-    //         window.speechSynthesis.speak(utterance);
-    //     } else {
-    //         alert('Sorry, your browser does not support text-to-speech.');
-    //     }
-    // };
+
 
     return (
         <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
@@ -110,13 +111,21 @@ function QuestionsSection({ questions, activeIndex, onQuestion }) {
                     {questions[activeIndex]?.question}
                 </h2>
 
-                {/* <Volume2
-                    className="mt-2 text-blue-600 hover:text-blue-800 cursor-pointer"
-                    onClick={() => textToSpeech(questions[activeIndex]?.question)}
-                /> */}
             </div>
         </div>
     );
 }
 
 export default QuestionsSection;
+
+
+
+
+
+
+
+
+{/* <Volume2
+                    className="mt-2 text-blue-600 hover:text-blue-800 cursor-pointer"
+                    onClick={() => textToSpeech(questions[activeIndex]?.question)}
+                /> */}
