@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 // import { db } from "../../../../../utils/db";
 // import { MockInterview } from "../../../../../utils/schema";
 // import { eq } from "drizzle-orm";
@@ -139,172 +139,172 @@
 
 
 
-// "use client"
-// import { db } from "../../../../../utils/db";
-// import { MockInterview } from "../../../../../utils/schema";
-// import { eq } from "drizzle-orm";
-// import { useEffect, useState } from "react"
-// import { useParams } from "next/navigation";
-// // import QuestionSection from "./_components/questionSection";
-
-// import RecaurdAnswer from "./_components/recaurdAnswer";
+"use client"
+import { db } from "../../../../../utils/db";
+import { MockInterview } from "../../../../../utils/schema";
+import { eq } from "drizzle-orm";
+import { useEffect, useState } from "react"
+import { useParams } from "next/navigation";
 // import QuestionSection from "./_components/questionSection";
-// // import { Button } from "@/components/ui/button";
-// // import Link from "next/link";
 
-// function StartInterview() {
-//     const [interviewData, setInterviewData] = useState(null);
-//     const [mockInterviewQuestions, setMockInterviewQuestions] = useState(null);
-//     const [loading, setLoading] = useState(false);
-//     const [error, setError] = useState(null);
-//     const [activeIndex, setActiveIndex] = useState(0);
+import RecaurdAnswer from "./_components/recaurdAnswer";
+import QuestionSection from "./_components/questionSection";
+// import { Button } from "@/components/ui/button";
+// import Link from "next/link";
 
-//     const params = useParams();
-//     const interviewID = params?.interviewId; // Fixed: Define interviewId from params
+function StartInterview() {
+    const [interviewData, setInterviewData] = useState(null);
+    const [mockInterviewQuestions, setMockInterviewQuestions] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
 
-//     console.log(params);
+    const params = useParams();
+    const interviewID = params?.interviewId; // Fixed: Define interviewId from params
 
-//     // Simplified: removed isRouterReady state
+    console.log(params);
 
-
-
-
-//     const fetchData = async (interviewID) => {
-//         console.log("Fetching interview data for ID:", interviewID);
-
-//         try {
-//             setLoading(true);
-//             setError(null);
-
-//             const result = await db.select()
-//                 .from(MockInterview)
-//                 .where(eq(MockInterview.mockId, interviewID));
-
-//             console.log("Database result:", result);
-
-//             if (result.length === 0) {
-//                 throw new Error("No interview found with this ID");
-//             }
-
-//             const interviewRecord = result[0];
-//             console.log("Interview record:", interviewRecord);
-
-//             // Check if jsonMockResp exists and is not empty
-//             if (!interviewRecord.jsonMockResp) {
-//                 throw new Error("No questions data found in this interview record");
-//             }
-
-//             let questions;
-//             try {
-//                 const rawData = interviewRecord.jsonMockResp;
-//                 console.log("Raw JSON data:", rawData);
-
-//                 // Parse the JSON
-//                 questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
-//                 console.log("Parsed questions:", questions);
-
-//                 // Validate the structure
-//                 if (!Array.isArray(questions)) {
-//                     console.error("Questions data is not an array:", questions);
-//                     throw new Error("Questions data is not in expected array format");
-//                 }
-
-//                 if (questions.length === 0) {
-//                     throw new Error("No questions found in the data");
-//                 }
-
-
-//                 // Validate each question has required fields
-//                 for (let i = 0; i < questions.length; i++) {
-//                     const question = questions[i];
-//                     if (!question.question || !question.answer) {
-//                         console.error(`Question ${i + 1} is invalid:`, question);
-//                         throw new Error(`Question ${i + 1} is missing required fields`);
-//                     }
-//                 }
-
-//             } catch (parseError) {
-//                 console.error("JSON parsing error:", parseError);
-//                 console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
-//                 throw new Error("Failed to parse interview questions. The data may be corrupted.");
-//             }
-
-//             // Set the data
-//             setMockInterviewQuestions(questions);
-//             setInterviewData(interviewRecord);
-
-//             console.log("Successfully loaded questions:", questions);
-
-//         } catch (err) {
-//             console.error("Fetch error:", err);
-//             setError(err.message);
-
-//             // Clear the questions state on error
-//             setMockInterviewQuestions([]);
-
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+    // Simplified: removed isRouterReady state
 
 
 
 
-//     const handleQuestionClick = (index) => {
-//         setActiveIndex(index);
-//     };
-//     console.log("Above of  loading is working");
+    const fetchData = async (interviewID) => {
+        console.log("Fetching interview data for ID:", interviewID);
 
-//     useEffect(() => {
-//         if (interviewID) {
+        try {
+            setLoading(true);
+            setError(null);
 
-//             fetchData(interviewID);
-//         }
-//     }, [interviewID]);
+            const result = await db.select()
+                .from(MockInterview)
+                .where(eq(MockInterview.mockId, interviewID));
 
-//     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
-//     console.log("Below of loading is working");
+            console.log("Database result:", result);
+
+            if (result.length === 0) {
+                throw new Error("No interview found with this ID");
+            }
+
+            const interviewRecord = result[0];
+            console.log("Interview record:", interviewRecord);
+
+            // Check if jsonMockResp exists and is not empty
+            if (!interviewRecord.jsonMockResp) {
+                throw new Error("No questions data found in this interview record");
+            }
+
+            let questions;
+            try {
+                const rawData = interviewRecord.jsonMockResp;
+                console.log("Raw JSON data:", rawData);
+
+                // Parse the JSON
+                questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+                console.log("Parsed questions:", questions);
+
+                // Validate the structure
+                if (!Array.isArray(questions)) {
+                    console.error("Questions data is not an array:", questions);
+                    throw new Error("Questions data is not in expected array format");
+                }
+
+                if (questions.length === 0) {
+                    throw new Error("No questions found in the data");
+                }
+
+
+                // Validate each question has required fields
+                for (let i = 0; i < questions.length; i++) {
+                    const question = questions[i];
+                    if (!question.question || !question.answer) {
+                        console.error(`Question ${i + 1} is invalid:`, question);
+                        throw new Error(`Question ${i + 1} is missing required fields`);
+                    }
+                }
+
+            } catch (parseError) {
+                console.error("JSON parsing error:", parseError);
+                console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
+                throw new Error("Failed to parse interview questions. The data may be corrupted.");
+            }
+
+            // Set the data
+            setMockInterviewQuestions(questions);
+            setInterviewData(interviewRecord);
+
+            console.log("Successfully loaded questions:", questions);
+
+        } catch (err) {
+            console.error("Fetch error:", err);
+            setError(err.message);
+
+            // Clear the questions state on error
+            setMockInterviewQuestions([]);
+
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
 
 
-//     if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
-//     if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
-//     if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
-//         return <div className="p-4 text-red-500">
-//             No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
-//         </div>;
-//     }
+    const handleQuestionClick = (index) => {
+        setActiveIndex(index);
+    };
+    console.log("Above of  loading is working");
+
+    useEffect(() => {
+        if (interviewID) {
+
+            fetchData(interviewID);
+        }
+    }, [interviewID]);
+
+    if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
+    console.log("Below of loading is working");
 
 
 
 
-//     return (
-//         <div className="p-4">
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-
-//                 <QuestionSection
-//                     questions={mockInterviewQuestions}
-//                     activeIndex={activeIndex}
-//                     isLoading={loading}
-//                     error={error}
-//                     onQuestion={handleQuestionClick}
-//                 />
+    if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+    if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
+    if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
+        return <div className="p-4 text-red-500">
+            No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
+        </div>;
+    }
 
 
 
-//                 <RecaurdAnswer
-//                     questions={mockInterviewQuestions}
-//                     activeIndex={activeIndex}
-//                     interviewData={interviewData}
-//                 />
 
-//             </div>
-//         </div>
-//     );
-// }
+    return (
+        <div className="p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-// export default StartInterview;
+                <QuestionSection
+                    questions={mockInterviewQuestions}
+                    activeIndex={activeIndex}
+                    isLoading={loading}
+                    error={error}
+                    onQuestion={handleQuestionClick}
+                />
+
+
+
+                <RecaurdAnswer
+                    questions={mockInterviewQuestions}
+                    activeIndex={activeIndex}
+                    interviewData={interviewData}
+                />
+
+            </div>
+        </div>
+    );
+}
+
+export default StartInterview;
 
 
 
@@ -514,149 +514,3 @@ export default StartInterview; */}
 
 
 
-
-import { db } from "../../../../../utils/db";
-import { MockInterview } from "../../../../../utils/schema";
-import { eq } from "drizzle-orm";
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation";
-
-import RecaurdAnswer from "./_components/recaurdAnswer";
-import QuestionSection from "./_components/questionSection"; // Make sure this matches your actual component name
-
-function StartInterview() {
-    const [interviewData, setInterviewData] = useState(null);
-    const [mockInterviewQuestions, setMockInterviewQuestions] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    const params = useParams();
-    const interviewID = params?.interviewId;
-
-    console.log(params);
-
-    const fetchData = async (interviewID) => {
-        console.log("Fetching interview data for ID:", interviewID);
-
-        try {
-            setLoading(true);
-            setError(null);
-
-            const result = await db.select()
-                .from(MockInterview)
-                .where(eq(MockInterview.mockId, interviewID));
-
-            console.log("Database result:", result);
-
-            if (result.length === 0) {
-                throw new Error("No interview found with this ID");
-            }
-
-            const interviewRecord = result[0];
-            console.log("Interview record:", interviewRecord);
-
-            // Check if jsonMockResp exists and is not empty
-            if (!interviewRecord.jsonMockResp) {
-                throw new Error("No questions data found in this interview record");
-            }
-
-            let questions;
-            try {
-                const rawData = interviewRecord.jsonMockResp;
-                console.log("Raw JSON data:", rawData);
-
-                // Parse the JSON
-                questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
-                console.log("Parsed questions:", questions);
-
-                // Validate the structure
-                if (!Array.isArray(questions)) {
-                    console.error("Questions data is not an array:", questions);
-                    throw new Error("Questions data is not in expected array format");
-                }
-
-                if (questions.length === 0) {
-                    throw new Error("No questions found in the data");
-                }
-
-                // Validate each question has required fields
-                for (let i = 0; i < questions.length; i++) {
-                    const question = questions[i];
-                    if (!question.question || !question.answer) {
-                        console.error(`Question ${i + 1} is invalid:`, question);
-                        throw new Error(`Question ${i + 1} is missing required fields`);
-                    }
-                }
-
-            } catch (parseError) {
-                console.error("JSON parsing error:", parseError);
-                console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
-                throw new Error("Failed to parse interview questions. The data may be corrupted.");
-            }
-
-            // Set the data
-            setMockInterviewQuestions(questions);
-            setInterviewData(interviewRecord);
-
-            console.log("Successfully loaded questions:", questions);
-
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError(err.message);
-            // Clear the questions state on error
-            setMockInterviewQuestions([]);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleQuestionClick = (index) => {
-        setActiveIndex(index);
-    };
-
-    useEffect(() => {
-        if (interviewID) {
-            fetchData(interviewID);
-        }
-    }, [interviewID]);
-
-    // Show loading state
-    if (loading) {
-        return <div className="p-4 text-blue-500">Loading interview data...</div>;
-    }
-
-    // Show error state
-    if (error) {
-        return <div className="p-4 text-red-500">Error: {error}</div>;
-    }
-
-    // Show no questions state
-    if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
-        return (
-            <div className="p-4 text-red-500">
-                No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
-            </div>
-        );
-    }
-
-    return (
-        <div className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <QuestionSection
-                    questions={mockInterviewQuestions}
-                    activeIndex={activeIndex}
-                    onQuestion={handleQuestionClick}
-                />
-
-                <RecaurdAnswer
-                    questions={mockInterviewQuestions}
-                    activeIndex={activeIndex}
-                    interviewData={interviewData}
-                />
-            </div>
-        </div>
-    );
-}
-
-export default StartInterview;
