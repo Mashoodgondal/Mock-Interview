@@ -78,6 +78,79 @@ const NewInterview = () => {
 
 
 
+    // const SubmitHandler = async (e) => {
+    //     e.preventDefault();
+
+    //     if (!jobPosition || !jobDescription || !jobExperience) {
+    //         alert("Please fill in all the fields: Job Position, Description, and Experience.");
+    //         return;
+    //     }
+
+    //     setloading(true);
+
+    //     const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Include 'question' and 'answer' fields.`;
+
+    //     try {
+    //         const result = await chatSession.sendMessage(InputPrompt);
+    //         const rawText = await result.response.text();
+
+    //         const MockjsonResp = rawText.replace('```json', '').replace('```', '');
+
+    //         let parsedJson;
+    //         try {
+    //             parsedJson = JSON.parse(MockjsonResp);
+    //             console.log("Parsed questions/answers:", parsedJson);
+    //             setjsonResp(MockjsonResp);
+    //             // console.log("json response", MockjsonResp)
+
+    //         } catch (err) {
+    //             console.error("Failed to parse JSON response:", err);
+    //             alert("Invalid response format from AI. Please try again.");
+    //             return;
+    //         }
+
+    //         const newMockid = uuidv4();
+
+    //         // Insert into database
+    //         try {
+    //             const inserted = await db.insert(MockInterview).values({
+    //                 mockId: newMockid,
+    //                 jsonMockResp: MockjsonResp,
+    //                 jobPosition,
+    //                 jobDesc: jobDescription,
+    //                 jobExperience,
+    //                 createdBy: user?.primaryEmailAddress?.emailAddress,
+    //                 createdAt: moment().format('DD-MM-YYYY')
+    //             }).returning({ mockId: MockInterview.mockId });
+
+    //             if (inserted.length > 0) {
+    //                 alert("Interview questions successfully saved!");
+    //                 router.push(`dashboard/interview/${newMockid}`);
+    //                 setOpen(false);
+    //             } else {
+    //                 alert("Something went wrong. Data was not saved.");
+    //             }
+    //         } catch (dbErr) {
+    //             console.error("Database insert error:", dbErr);
+    //             alert("Error saving data to database. Please check server logs.");
+    //         }
+
+    //     } catch (err) {
+    //         console.error("Error during API call or processing:", err);
+    //         alert("Something went wrong. Please try again later.");
+    //     } finally {
+    //         setloading(false);
+    //     }
+    // };
+
+
+
+
+
+
+
+
+
     const SubmitHandler = async (e) => {
         e.preventDefault();
 
@@ -88,26 +161,91 @@ const NewInterview = () => {
 
         setloading(true);
 
-        const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Include 'question' and 'answer' fields.`;
+        const InputPrompt = `Job position: ${jobPosition}, Job Description: ${jobDescription}, Years of Experience: ${jobExperience}. Based on these, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTION_COUNT} interview questions and answers in JSON format. Return only a valid JSON array where each object has 'question' and 'answer' fields. Example format: [{"question":"Tell me about yourself","answer":"Sample answer"}]`;
 
         try {
             const result = await chatSession.sendMessage(InputPrompt);
             const rawText = await result.response.text();
 
-            const MockjsonResp = rawText.replace('```json', '').replace('```', '');
+            console.log("Raw API response:", rawText);
 
+            // Clean up the response - remove markdown formatting
+            let cleanedResponse = rawText
+                .replace(/```json/g, '')
+                .replace(/```/g, '')
+                .replace(/^\s*[\r\n]/gm, '') // Remove empty lines
+                .trim();
+
+            console.log("Cleaned response:", cleanedResponse);
+
+            // Try to parse the JSON
             let parsedJson;
             try {
-                parsedJson = JSON.parse(MockjsonResp);
-                console.log("Parsed questions/answers:", parsedJson);
-                setjsonResp(MockjsonResp);
-                // console.log("json response", MockjsonResp)
+                parsedJson = JSON.parse(cleanedResponse);
+                console.log("Parsed JSON:", parsedJson);
+            } catch (parseError) {
+                console.error("JSON parsing failed:", parseError);
+                console.error("Cleaned response that failed:", cleanedResponse);
 
-            } catch (err) {
-                console.error("Failed to parse JSON response:", err);
-                alert("Invalid response format from AI. Please try again.");
+                // Try to extract JSON from the response if it's wrapped in other text
+                const jsonMatch = cleanedResponse.match(/\[[\s\S]*\]/);
+                if (jsonMatch) {
+                    try {
+                        parsedJson = JSON.parse(jsonMatch[0]);
+                        cleanedResponse = jsonMatch[0];
+                        console.log("Extracted and parsed JSON:", parsedJson);
+                    } catch (secondParseError) {
+                        console.error("Second JSON parsing attempt failed:", secondParseError);
+                        alert("Invalid response format from AI. Please try again.");
+                        return;
+                    }
+                } else {
+                    alert("Invalid response format from AI. Please try again.");
+                    return;
+                }
+            }
+
+            // Validate the parsed JSON structure
+            if (!Array.isArray(parsedJson)) {
+                console.error("Response is not an array:", parsedJson);
+                alert("Invalid response format: Expected an array of questions.");
                 return;
             }
+
+            if (parsedJson.length === 0) {
+                console.error("Empty questions array");
+                alert("No questions received from AI. Please try again.");
+                return;
+            }
+
+            // Validate each question object
+            const validQuestions = [];
+            for (let i = 0; i < parsedJson.length; i++) {
+                const item = parsedJson[i];
+
+                if (!item.question || !item.answer) {
+                    console.warn(`Question ${i + 1} is missing required fields:`, item);
+                    continue; // Skip invalid questions
+                }
+
+                // Ensure question and answer are strings
+                const validQuestion = {
+                    question: String(item.question).trim(),
+                    answer: String(item.answer).trim()
+                };
+
+                validQuestions.push(validQuestion);
+            }
+
+            if (validQuestions.length === 0) {
+                alert("No valid questions found in the response. Please try again.");
+                return;
+            }
+
+            console.log("Valid questions to save:", validQuestions);
+
+            // Update the state with valid questions
+            setjsonResp(JSON.stringify(validQuestions));
 
             const newMockid = uuidv4();
 
@@ -115,7 +253,7 @@ const NewInterview = () => {
             try {
                 const inserted = await db.insert(MockInterview).values({
                     mockId: newMockid,
-                    jsonMockResp: MockjsonResp,
+                    jsonMockResp: JSON.stringify(validQuestions), // Store the validated questions
                     jobPosition,
                     jobDesc: jobDescription,
                     jobExperience,
@@ -123,8 +261,10 @@ const NewInterview = () => {
                     createdAt: moment().format('DD-MM-YYYY')
                 }).returning({ mockId: MockInterview.mockId });
 
+                console.log("Database insert result:", inserted);
+
                 if (inserted.length > 0) {
-                    alert("Interview questions successfully saved!");
+                    alert(`Interview questions successfully saved! Generated ${validQuestions.length} questions.`);
                     router.push(`dashboard/interview/${newMockid}`);
                     setOpen(false);
                 } else {
@@ -142,8 +282,6 @@ const NewInterview = () => {
             setloading(false);
         }
     };
-
-
 
 
 
