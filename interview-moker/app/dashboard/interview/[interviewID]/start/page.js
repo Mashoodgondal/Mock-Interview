@@ -160,7 +160,7 @@ function StartInterview() {
     const [activeIndex, setActiveIndex] = useState(0);
 
     const params = useParams();
-    const interviewID = params?.interviewId; // Fixed: Define interviewId from params
+    const interviewId = params?.interviewId; // Fixed: Define interviewId from params
 
     console.log(params);
 
@@ -169,8 +169,8 @@ function StartInterview() {
 
 
 
-    const fetchData = async (interviewID) => {
-        console.log("Fetching interview data for ID:", interviewID);
+    const fetchData = async (interviewId) => {
+        console.log("Fetching interview data for ID:", interviewId);
 
         try {
             setLoading(true);
@@ -178,7 +178,7 @@ function StartInterview() {
 
             const result = await db.select()
                 .from(MockInterview)
-                .where(eq(MockInterview.mockId, interviewID));
+                .where(eq(MockInterview.mockId, params.interviewId));
 
             console.log("Database result:", result);
 
@@ -256,11 +256,11 @@ function StartInterview() {
     console.log("Above of  loading is working");
 
     useEffect(() => {
-        if (interviewID) {
+        if (interviewId) {
 
-            fetchData(interviewID);
+            fetchData(interviewId);
         }
-    }, [interviewID]);
+    }, [interviewId]);
 
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
     console.log("Below of loading is working");
