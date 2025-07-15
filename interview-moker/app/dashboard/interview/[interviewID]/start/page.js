@@ -170,6 +170,7 @@ function StartInterview() {
 
 
     const fetchData = async (interviewId) => {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
         console.log("Fetching interview data for ID:", interviewId);
 
         try {
