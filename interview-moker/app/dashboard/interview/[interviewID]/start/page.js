@@ -478,6 +478,9 @@ export default StartInterview; */}
 
 
 // const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
 
 
 
