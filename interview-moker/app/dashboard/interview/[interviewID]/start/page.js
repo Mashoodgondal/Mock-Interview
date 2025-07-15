@@ -152,20 +152,25 @@ import QuestionSection from "./_components/questionSection";
 // import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 
-function StartInterview() {
+function StartInterview({ params }) {
     const [interviewData, setInterviewData] = useState(null);
     const [mockInterviewQuestions, setMockInterviewQuestions] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const params = useParams();
-    const interviewId = params?.interviewId; // Fixed: Define interviewId from params
+    // const params = useParams();
+    // const interviewId = params?.interviewId; 
 
-    console.log(params);
+    // console.log(params);
 
     // Simplified: removed isRouterReady state
+    useEffect(() => {
 
+
+        fetchData();
+
+    }, []);
 
 
 
@@ -256,12 +261,12 @@ function StartInterview() {
     };
     console.log("Above of  loading is working");
 
-    useEffect(() => {
-        if (interviewId) {
+    // useEffect(() => {
+    //     if (interviewId) {
 
-            fetchData(interviewId);
-        }
-    }, [interviewId]);
+    //         fetchData(interviewId);
+    //     }
+    // }, [interviewId]);
 
     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
     console.log("Below of loading is working");
@@ -468,6 +473,11 @@ export default StartInterview; */}
 // };
 
 
+
+
+
+
+// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
 
 
 
