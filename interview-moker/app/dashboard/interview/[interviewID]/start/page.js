@@ -166,7 +166,7 @@ function StartInterview({ params }) {
     // Simplified: removed isRouterReady state
     useEffect(() => {
 
-
+        console.log("interviewId from params:", params?.interviewId);
         fetchData();
 
     }, []);
@@ -174,19 +174,26 @@ function StartInterview({ params }) {
 
     const fetchData = async () => {
         try {
-            const result = (await db.select().from(MockInterview).where(eq(MockInterview.mockId, params.interviewId)))
+            const result = await db
+                .select()
+                .from(MockInterview)
+                .where(eq(MockInterview.mockId, params.interviewId));
+
+            if (result.length === 0) {
+                console.error("No interview found with this Id");
+                setError("No interview found");
+                return;
+            }
+
             const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-            console.log(jsonMockResp);
-            setMockInterviewQuestions(jsonMockResp)
-            setInterviewData(result[0])
-
+            setMockInterviewQuestions(jsonMockResp);
+            setInterviewData(result[0]);
         } catch (error) {
-            console.log("there is error in function", error);
-
+            console.log("Error in fetchData:", error);
+            setError("Failed to load interview");
         }
+    };
 
-
-    }
     // const fetchData = async (interviewId) => {
     //     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
     //     console.log("Fetching interview data for ID:", interviewId);
