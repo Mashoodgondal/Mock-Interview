@@ -153,7 +153,7 @@ import QuestionSection from "./_components/questionSection";
 
 function StartInterview({ params }) {
     const [interviewData, setInterviewData] = useState(null);
-    const [mockInterviewQuestions, setMockInterviewQuestions] = useState(null);
+    const [mockInterviewQuestions, setMockInterviewQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
