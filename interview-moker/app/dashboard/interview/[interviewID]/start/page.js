@@ -173,11 +173,18 @@ function StartInterview({ params }) {
 
 
     const fetchData = async () => {
-        const result = (await db.select().from(MockInterview).where(eq(MockInterview.mockId, params.interviewId)))
-        const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-        console.log(jsonMockResp);
-        setMockInterviewQuestions(jsonMockResp)
-        setInterviewData(result[0])
+        try {
+            const result = (await db.select().from(MockInterview).where(eq(MockInterview.mockId, params.interviewId)))
+            const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+            console.log(jsonMockResp);
+            setMockInterviewQuestions(jsonMockResp)
+            setInterviewData(result[0])
+
+        } catch (error) {
+            console.log("there is error in function", error);
+
+        }
+
 
     }
     // const fetchData = async (interviewId) => {
@@ -280,13 +287,13 @@ function StartInterview({ params }) {
 
 
 
-    if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
-    if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
-    if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
-        return <div className="p-4 text-red-500">
-            No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
-        </div>;
-    }
+    // if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
+    // if (!mockInterviewQuestions) return <div className="p-4">No questions available</div>;
+    // if (!mockInterviewQuestions || mockInterviewQuestions.length === 0) {
+    //     return <div className="p-4 text-red-500">
+    //         No questions available. Make sure your interview data has valid `jsonMockResp` with at least one question.
+    //     </div>;
+    // }
 
 
 
