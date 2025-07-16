@@ -144,13 +144,12 @@ import { db } from "../../../../../utils/db";
 import { MockInterview } from "../../../../../utils/schema";
 import { eq } from "drizzle-orm";
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation";
-// import QuestionSection from "./_components/questionSection";
+// import { useParams } from "next/navigation";
+
 
 import RecaurdAnswer from "./_components/recaurdAnswer";
 import QuestionSection from "./_components/questionSection";
-// import { Button } from "@/components/ui/button";
-// import Link from "next/link";
+
 
 function StartInterview({ params }) {
     const [interviewData, setInterviewData] = useState(null);
@@ -173,85 +172,92 @@ function StartInterview({ params }) {
     }, []);
 
 
+    const fetchData = async () => {
+        const result = (await db.select().from(MockInterview).where(eq(MockInterview.mockId, params.interviewId)))
+        const jsonMockResp = JSON.parse(result[0].jsonMockResp);
+        console.log(jsonMockResp);
+        setMockInterviewQuestions(jsonMockResp)
+        setInterviewData(result[0])
 
-    const fetchData = async (interviewId) => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
-        console.log("Fetching interview data for ID:", interviewId);
+    }
+    // const fetchData = async (interviewId) => {
+    //     console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    //     console.log("Fetching interview data for ID:", interviewId);
 
-        try {
-            setLoading(true);
-            setError(null);
+    //     try {
+    //         setLoading(true);
+    //         setError(null);
 
-            const result = await db.select()
-                .from(MockInterview)
-                .where(eq(MockInterview.mockId, params.interviewId));
+    //         const result = await db.select()
+    //             .from(MockInterview)
+    //             .where(eq(MockInterview.mockId, params.interviewId));
 
-            console.log("Database result:", result);
+    //         console.log("Database result:", result);
 
-            if (result.length === 0) {
-                throw new Error("No interview found with this ID");
-            }
+    //         if (result.length === 0) {
+    //             throw new Error("No interview found with this ID");
+    //         }
 
-            const interviewRecord = result[0];
-            console.log("Interview record:", interviewRecord);
+    //         const interviewRecord = result[0];
+    //         console.log("Interview record:", interviewRecord);
 
-            // Check if jsonMockResp exists and is not empty
-            if (!interviewRecord.jsonMockResp) {
-                throw new Error("No questions data found in this interview record");
-            }
+    //         // Check if jsonMockResp exists and is not empty
+    //         if (!interviewRecord.jsonMockResp) {
+    //             throw new Error("No questions data found in this interview record");
+    //         }
 
-            let questions;
-            try {
-                const rawData = interviewRecord.jsonMockResp;
-                console.log("Raw JSON data:", rawData);
+    //         let questions;
+    //         try {
+    //             const rawData = interviewRecord.jsonMockResp;
+    //             console.log("Raw JSON data:", rawData);
 
-                // Parse the JSON
-                questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
-                console.log("Parsed questions:", questions);
+    //             // Parse the JSON
+    //             questions = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+    //             console.log("Parsed questions:", questions);
 
-                // Validate the structure
-                if (!Array.isArray(questions)) {
-                    console.error("Questions data is not an array:", questions);
-                    throw new Error("Questions data is not in expected array format");
-                }
+    //             // Validate the structure
+    //             if (!Array.isArray(questions)) {
+    //                 console.error("Questions data is not an array:", questions);
+    //                 throw new Error("Questions data is not in expected array format");
+    //             }
 
-                if (questions.length === 0) {
-                    throw new Error("No questions found in the data");
-                }
+    //             if (questions.length === 0) {
+    //                 throw new Error("No questions found in the data");
+    //             }
 
 
-                // Validate each question has required fields
-                for (let i = 0; i < questions.length; i++) {
-                    const question = questions[i];
-                    if (!question.question || !question.answer) {
-                        console.error(`Question ${i + 1} is invalid:`, question);
-                        throw new Error(`Question ${i + 1} is missing required fields`);
-                    }
-                }
+    //             // Validate each question has required fields
+    //             for (let i = 0; i < questions.length; i++) {
+    //                 const question = questions[i];
+    //                 if (!question.question || !question.answer) {
+    //                     console.error(`Question ${i + 1} is invalid:`, question);
+    //                     throw new Error(`Question ${i + 1} is missing required fields`);
+    //                 }
+    //             }
 
-            } catch (parseError) {
-                console.error("JSON parsing error:", parseError);
-                console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
-                throw new Error("Failed to parse interview questions. The data may be corrupted.");
-            }
+    //         } catch (parseError) {
+    //             console.error("JSON parsing error:", parseError);
+    //             console.error("Raw data that failed to parse:", interviewRecord.jsonMockResp);
+    //             throw new Error("Failed to parse interview questions. The data may be corrupted.");
+    //         }
 
-            // Set the data
-            setMockInterviewQuestions(questions);
-            setInterviewData(interviewRecord);
+    //         // Set the data
+    //         setMockInterviewQuestions(questions);
+    //         setInterviewData(interviewRecord);
 
-            console.log("Successfully loaded questions:", questions);
+    //         console.log("Successfully loaded questions:", questions);
 
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError(err.message);
+    //     } catch (err) {
+    //         console.error("Fetch error:", err);
+    //         setError(err.message);
 
-            // Clear the questions state on error
-            setMockInterviewQuestions([]);
+    //         // Clear the questions state on error
+    //         setMockInterviewQuestions([]);
 
-        } finally {
-            setLoading(false);
-        }
-    };
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
 
 
@@ -474,13 +480,6 @@ export default StartInterview; */}
 
 
 
-
-
-
-// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
-// const jsonMockResp = JSON.parse(result[0].jsonMockResp);
 
 
 
