@@ -165,11 +165,11 @@ function StartInterview({ params }) {
 
     // Simplified: removed isRouterReady state
     useEffect(() => {
-
-        console.log("interviewId from params:", params?.interviewId);
+        console.log("params:", params);
+        console.log("interviewId:", params?.interviewId);
         fetchData();
-
     }, []);
+
 
 
     const fetchData = async () => {
