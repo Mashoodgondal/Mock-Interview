@@ -85,37 +85,78 @@
 // };
 import React from 'react';
 
-function QuestionsSection({ questions, activeIndex, onQuestion }) {
+function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error }) {
+    console.log("QuestionsSection props:", { questions, activeIndex, isLoading, error });
 
+    if (isLoading) {
+        return (
+            <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                <div className="animate-pulse">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                        ))}
+                    </div>
+                    <div className="mt-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                <div className="text-red-500 text-center">
+                    <p>Error loading questions: {error}</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!questions || !Array.isArray(questions) || questions.length === 0) {
+        return (
+            <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+                <div className="text-gray-500 text-center">
+                    <p>No questions available</p>
+                    <p className="text-sm mt-2">Questions data: {JSON.stringify(questions)}</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {Array.isArray(questions) && questions.length > 0 ? (
-                    questions.map((question, index) => (
-                        <button
-                            key={index}
-                            onClick={() => onQuestion(index)}
-                            className={`py-2 px-3 rounded-full text-xs md:text-sm font-medium transition-all
-                    ${activeIndex === index
-                                    ? 'bg-blue-600 text-white'
-                                    : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-500 dark:hover:text-white'
-                                }`}
-                        >
-                            Question #{index + 1}
-                        </button>
-                    ))
-                ) : (
-                    <p className="text-gray-500">No questions available</p>
-                )}
+                {questions.map((question, index) => (
+                    <button
+                        key={index}
+                        onClick={() => onQuestion(index)}
+                        className={`py-2 px-3 rounded-full text-xs md:text-sm font-medium transition-all
+                            ${activeIndex === index
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-500 dark:hover:text-white'
+                            }`}
+                    >
+                        Question #{index + 1}
+                    </button>
+                ))}
             </div>
 
-
             <div className="mt-6">
-                <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100">
-                    {questions[activeIndex]?.question}
-                </h2>
-
+                {questions[activeIndex] ? (
+                    <div>
+                        <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100">
+                            {questions[activeIndex]?.question || 'Question not available'}
+                        </h2>
+                        {/* Debug info - remove in production */}
+                        <details className="mt-2 text-xs text-gray-500">
+                            <summary>Debug Info</summary>
+                            <pre>{JSON.stringify(questions[activeIndex], null, 2)}</pre>
+                        </details>
+                    </div>
+                ) : (
+                    <p className="text-gray-500">Select a question to view</p>
+                )}
             </div>
         </div>
     );
