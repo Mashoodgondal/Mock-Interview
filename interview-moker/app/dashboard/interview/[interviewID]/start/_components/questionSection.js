@@ -17,15 +17,15 @@
 //     if (!questions || !Array.isArray(questions) || questions.length === 0) {
 //         return <div className="p-4 text-gray-500">No questions available.</div>;
 //     }
-//     const textToSpeach = (text) => {
-//         if ('speechSynthesis' in window) {
-//             const speech = new SpeechSynthesisUtterance(text)
-//             window.speechSynthesis.speak(speech)
-//         }
-//         else {
-//             alert('Sorry, Your brouser does not support the speech')
-//         }
+// const textToSpeach = (text) => {
+//     if ('speechSynthesis' in window) {
+//         const speech = new SpeechSynthesisUtterance(text)
+//         window.speechSynthesis.speak(speech)
 //     }
+//     else {
+//         alert('Sorry, Your brouser does not support the speech')
+//     }
+// }
 //     return (
 //         <div className="flex flex-col h-full bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg overflow-hidden border border-gray-100">
 //             {/* Buttons Section */}
@@ -83,7 +83,9 @@
 //         alert('Sorry, your browser does not support text-to-speech.');
 //     }
 // };
+"use client"
 import React from 'react';
+import { FaVolumeHigh } from "react-icons/fa6";
 
 function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error }) {
     console.log("QuestionsSection props:", { questions, activeIndex, isLoading, error });
@@ -123,6 +125,15 @@ function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error
             </div>
         );
     }
+    const textToSpeach = (text) => {
+        if ('speechSynthesis' in window) {
+            const speech = new SpeechSynthesisUtterance(text)
+            window.speechSynthesis.speak(speech)
+        }
+        else {
+            alert('Sorry, Your brouser does not support the speech')
+        }
+    }
 
     return (
         <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
@@ -148,12 +159,9 @@ function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error
                         <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100">
                             {questions[activeIndex]?.question || 'Question not available'}
                         </h2>
-                        {/* Debug info - remove in production */}
-                        <details className="mt-2 text-xs text-gray-500">
-                            <summary>Debug Info</summary>
-                            <pre>{JSON.stringify(questions[activeIndex], null, 2)}</pre>
-                        </details>
+                        <FaVolumeHigh className="cursor-pointer" onClick={() => textToSpeach(questions[activeIndex]?.question)} />
                     </div>
+
                 ) : (
                     <p className="text-gray-500">Select a question to view</p>
                 )}

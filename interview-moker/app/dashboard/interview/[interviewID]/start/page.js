@@ -150,17 +150,13 @@ function StartInterview({ params }) {
             setLoading(true);
             setError(null);
 
-            console.log("🔍 Searching for interview with ID:", params.interviewID);
-            console.log("🔍 ID type:", typeof params.interviewID);
-            console.log("🔍 ID length:", params.interviewID?.length);
 
             const result = await db
                 .select()
                 .from(MockInterview)
                 .where(eq(MockInterview.mockId, params.interviewID));
 
-            console.log("📊 Database result:", result);
-            console.log("📊 Result length:", result.length);
+
 
             // Let's also check what interviews exist in the database
             const allInterviews = await db.select().from(MockInterview);
@@ -172,7 +168,7 @@ function StartInterview({ params }) {
             })));
 
             if (result.length === 0) {
-                console.error("❌ No interview found with this Id:", params.interviewID);
+
                 setError(`No interview found with ID: ${params.interviewID}`);
                 setLoading(false);
                 return;
@@ -192,7 +188,7 @@ function StartInterview({ params }) {
 
             // Ensure jsonMockResp is an array
             if (!Array.isArray(jsonMockResp)) {
-                console.error("jsonMockResp is not an array:", jsonMockResp);
+
                 setError("Invalid questions format");
                 setLoading(false);
                 return;
