@@ -76,12 +76,11 @@ const Interview = () => {
                         <div className="mb-6">
                             <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Interview Details</h2>
                             <div className="space-y-4">
-
                                 {/* Job Position */}
                                 <div className="flex items-start">
                                     <span className="text-gray-600 dark:text-gray-300 font-medium min-w-[180px]">Job Position:</span>
                                     <span className="text-gray-800 dark:text-gray-100">
-                                        {interviewData?.jobPosition || "Not specified"}
+                                        {loading ? "Loading..." : interviewData?.jobPosition || "Not specified"}
                                     </span>
                                 </div>
 
@@ -89,7 +88,7 @@ const Interview = () => {
                                 <div className="flex items-start">
                                     <span className="text-gray-600 dark:text-gray-300 font-medium min-w-[180px]">Job Description:</span>
                                     <span className="text-gray-800 dark:text-gray-100">
-                                        {interviewData?.jobDesc || "Not specified"}
+                                        {loading ? "Loading..." : interviewData?.jobDesc || "Not specified"}
                                     </span>
                                 </div>
 
@@ -97,10 +96,11 @@ const Interview = () => {
                                 <div className="flex items-start">
                                     <span className="text-gray-600 dark:text-gray-300 font-medium min-w-[180px]">Experience Required:</span>
                                     <span className="text-gray-800 dark:text-gray-100">
-                                        {interviewData?.jobExperience || "Not specified"}
+                                        {loading ? "Loading..." : interviewData?.jobExperience || "Not specified"}
                                     </span>
                                 </div>
                             </div>
+
                         </div>
 
                         {/* Interview Tips Box */}

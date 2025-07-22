@@ -1,6 +1,3 @@
-
-
-
 "use client";
 import { useState } from "react";
 import { IoMdMenu } from "react-icons/io";
