@@ -20,7 +20,7 @@
 
 //     useEffect(() => {
 //         console.log("params:", params);
-//         console.log("interviewId:", params?.interviewId);
+//         console.log("interviewID:", params?.interviewID);
 //         fetchData();
 //     }, []);
 
@@ -31,7 +31,7 @@
 //             const result = await db
 //                 .select()
 //                 .from(MockInterview)
-//                 .where(eq(MockInterview.mockId, params.interviewId));
+//                 .where(eq(MockInterview.mockId, params.interviewID));
 
 //             if (result.length === 0) {
 //                 console.error("No interview found with this Id");
@@ -58,11 +58,11 @@
 //     console.log("Above of  loading is working");
 
 //     // useEffect(() => {
-//     //     if (interviewId) {
+//     //     if (interviewID) {
 
-//     //         fetchData(interviewId);
+//     //         fetchData(interviewID);
 //     //     }
-//     // }, [interviewId]);
+//     // }, [interviewID]);
 
 //     if (loading) return <div className="p-4 text-blue-500"> Loading interview data...</div>
 //     console.log("Below of loading is working");
@@ -134,30 +134,30 @@ function StartInterview({ params }) {
 
     useEffect(() => {
         console.log("params:", params);
-        console.log("interviewId:", params?.interviewId);
+        console.log("interviewID:", params?.interviewID);
 
-        // Only fetch data if we have a valid interviewId
-        if (params?.interviewId) {
+        // Only fetch data if we have a valid interviewID
+        if (params?.interviewID) {
             fetchData();
         } else {
             setError("No interview ID provided");
             setLoading(false);
         }
-    }, [params?.interviewId]); // Add dependency
+    }, [params?.interviewID]); // Add dependency
 
     const fetchData = async () => {
         try {
             setLoading(true);
             setError(null);
 
-            console.log("🔍 Searching for interview with ID:", params.interviewId);
-            console.log("🔍 ID type:", typeof params.interviewId);
-            console.log("🔍 ID length:", params.interviewId?.length);
+            console.log("🔍 Searching for interview with ID:", params.interviewID);
+            console.log("🔍 ID type:", typeof params.interviewID);
+            console.log("🔍 ID length:", params.interviewID?.length);
 
             const result = await db
                 .select()
                 .from(MockInterview)
-                .where(eq(MockInterview.mockId, params.interviewId));
+                .where(eq(MockInterview.mockId, params.interviewID));
 
             console.log("📊 Database result:", result);
             console.log("📊 Result length:", result.length);
@@ -172,8 +172,8 @@ function StartInterview({ params }) {
             })));
 
             if (result.length === 0) {
-                console.error("❌ No interview found with this Id:", params.interviewId);
-                setError(`No interview found with ID: ${params.interviewId}`);
+                console.error("❌ No interview found with this Id:", params.interviewID);
+                setError(`No interview found with ID: ${params.interviewID}`);
                 setLoading(false);
                 return;
             }

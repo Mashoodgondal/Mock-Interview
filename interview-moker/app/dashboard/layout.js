@@ -8,14 +8,14 @@ import Footer from './_components/footer/page'
 const Dashboardlayout = ({ children }) => {
   return (
     <div>
-      {/* <MeshBackground> */}
-      <HeaderDashboard />
+      <MeshBackground>
+        <HeaderDashboard />
 
-      {children}
+        {children}
 
 
-      <Footer />
-      {/* </MeshBackground> */}
+        <Footer />
+      </MeshBackground>
     </div>
   )
 }
