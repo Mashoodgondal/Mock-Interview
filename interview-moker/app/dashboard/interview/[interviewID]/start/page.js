@@ -338,3 +338,9 @@ export default StartInterview;
 //                     interviewData={interviewData}
 //                 />
 //             </div>
+//                 <RecaurdAnswer
+//                     questions={mockInterviewQuestions}
+//                     activeIndex={activeIndex}
+//                     interviewData={interviewData}
+//                 />
+//             </div>
