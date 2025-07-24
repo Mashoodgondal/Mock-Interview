@@ -297,7 +297,23 @@ export default StartInterview;
 
 
 
+// return (
+//         <div className="p-4">
+//             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+//                 <QuestionSection
+//                     questions={mockInterviewQuestions}
+//                     activeIndex={activeIndex}
+//                     isLoading={loading}
+//                     error={error}
+//                     onQuestion={handleQuestionClick}
+//                 />
 
+//                 <RecaurdAnswer
+//                     questions={mockInterviewQuestions}
+//                     activeIndex={activeIndex}
+//                     interviewData={interviewData}
+//                 />
+//             </div>
 
 // return (
 //         <div className="p-4">
