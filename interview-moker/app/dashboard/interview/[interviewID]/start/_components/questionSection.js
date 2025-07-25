@@ -33,14 +33,17 @@ function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error
 
     if (!questions || !Array.isArray(questions) || questions.length === 0) {
         return (
-            <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-                <div className="text-gray-500 text-center">
-                    <p>No questions available</p>
-                    <p className="text-sm mt-2">Questions data: {JSON.stringify(questions)}</p>
+            <div className="flex justify-center items-center h-full min-h-[300px]">
+                <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 border-4 border-blue-200 rounded-full animate-spin border-t-blue-500"></div>
+                    <h2 className="text-lg font-medium text-gray-600 dark:text-gray-300 animate-pulse">
+                        Loading Questions
+                    </h2>
                 </div>
             </div>
         );
     }
+
     const textToSpeach = (text) => {
         if ('speechSynthesis' in window) {
             const speech = new SpeechSynthesisUtterance(text)
@@ -50,7 +53,6 @@ function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error
             alert('Sorry, Your brouser does not support the speech')
         }
     }
-
     return (
         <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
