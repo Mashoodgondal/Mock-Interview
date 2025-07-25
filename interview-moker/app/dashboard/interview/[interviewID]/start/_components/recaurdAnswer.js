@@ -1,25 +1,24 @@
+
 "use client"
 import React, { useEffect, useState } from 'react'
 import { FaMicrophone, FaStop } from 'react-icons/fa';
 import Webcam from 'react-webcam'
 import Image from 'next/image'
-import { toast } from 'react-hot-toast'; // or 'sonner' depending on what you're using
-import { userAnswer as userAnswerSchema } from '../../../../../../utils/schema';
+import { userAnswer as userAnswerSchema } from '../../../../../../utils/schema'; // Import the schema
 import camimg from '../../../../../../public/images.jpg'
 import chatSession from '../../../../../../utils/gemini';
 import { db } from '../../../../../../utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
-// Import the hook properly
 import useSpeechToText from 'react-hook-speech-to-text';
-
+// import InterviewResults from '../../feedback/page';
+// import Link from 'next/link';
 const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
     const { user } = useUser()
     const [userAnswer, setUserAnswer] = useState('')
     const [isTyping, setIsTyping] = useState(false)
-    const [inputMode, setInputMode] = useState('voice')
+    const [inputMode, setInputMode] = useState('voice') // 'voice' or 'text'
 
-    // Use the speech recognition hook correctly
     const {
         error,
         interimResult,
@@ -27,32 +26,32 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
         results,
         startSpeechToText,
         stopSpeechToText,
-        setResults
+        setResults,
     } = useSpeechToText({
         continuous: true,
         useLegacyResults: false
-    });
+    })
 
     const saveUserAnswer = async () => {
         if (isRecording) {
             stopSpeechToText();
         }
+
         await submitAnswer();
     };
 
     const submitAnswer = async () => {
         const trimmedAnswer = userAnswer?.trim();
         if (!trimmedAnswer || trimmedAnswer.split(' ').length < 3) {
-            toast.error('Your answer is too short, please try again.');
+            alert('Your answer is too short, please try again.');
             return;
         }
 
         if (!interviewData || !interviewData.mockId) {
             console.error("Missing interviewData or mockId");
-            toast.error("Interview session not initialized properly.");
+            alert("Interview session not initialized properly.");
             return;
         }
-
         const feedbackPrompt =
             `You are a supportive interview coach. Evaluate the user's answer based on communication skills, not correctness.\n` +
             `Focus on: clarity, structure, confidence, and relevance to the question asked.\n\n` +
@@ -66,11 +65,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             `- Don't compare to a "correct" answer - evaluate communication quality\n\n` +
             `Return JSON: {"rating": "3-5", "feedback": "brief positive feedback with one improvement tip"}\n` +
             `Example: {"rating": "4", "feedback": "Clear explanation with good examples. Consider adding more specific details to strengthen your points."}`;
-
         try {
-            // Show loading toast
-            const loadingToast = toast.loading('Submitting your answer...');
-
             const result = await chatSession.sendMessage(feedbackPrompt);
             const rawText = await result.response.text();
 
@@ -78,8 +73,8 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
 
             const cleaned = rawText
                 .replace(/```json|```/g, '')
-                .replace(/,\s*}/g, '}')
-                .replace(/,\s*]/g, ']')
+                .replace(/,\s*}/g, '}') // Remove trailing commas
+                .replace(/,\s*]/g, ']') // Remove trailing commas in arrays
                 .trim();
 
             let feedbackJSON;
@@ -88,12 +83,11 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             } catch (err) {
                 console.error("JSON Parse Error:", err);
                 console.error("Problematic JSON:", cleaned);
-                toast.dismiss(loadingToast);
-                toast.error("AI response was not valid JSON. Please try recording again.");
+                alert("AI response was not valid JSON. Please try recording again.");
                 return;
             }
 
-            console.log("Interview Mock ID:", interviewData.mockId);
+            console.log("Interview Mock ID:", interviewData.mockId); // Fixed: use interviewData.mockId
 
             const resp = await db.insert(userAnswerSchema).values({
                 mockIdRef: interviewData.mockId,
@@ -103,39 +97,26 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                 feedback: feedbackJSON.feedback || '',
                 rating: feedbackJSON.rating || '',
                 userEmail: user?.primaryEmailAddress?.emailAddress || '',
-                createdAt: moment().format('DD-MM-yyyy'),
+                createdAt: moment().format('DD-MM-yyyy'), // Fixed typo: was 'cratedAt'
             });
 
             console.log("Database insert response:", resp);
-
-            // Dismiss loading and show success
-            toast.dismiss(loadingToast);
-            toast.success('Answer submitted successfully ✅');
-
-            // Reset form
-            setUserAnswer('');
-            setResults([]);
-            setInputMode('voice');
+            alert('Answer submitted successfully ✅');
+            setUserAnswer(''); // Clear the answer after successful submission
+            setResults([]); // Clear speech results
+            setInputMode('voice'); // Reset to voice mode
             setIsTyping(false);
 
         } catch (err) {
             console.error("Error while saving answer:", err);
-            toast.error("Something went wrong while saving the answer. Check console for details.");
+            alert("Something went wrong while saving the answer. Check console for details.");
         }
     };
 
     const handleStartRecording = () => {
         if (!isTyping) {
-            setResults([]);
-            setUserAnswer('');
             startSpeechToText();
-            toast.success('Recording started! Speak now...');
         }
-    };
-
-    const handleStopRecording = () => {
-        stopSpeechToText();
-        toast.info('Recording stopped');
     };
 
     const handleTextInputChange = (e) => {
@@ -152,28 +133,16 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
         if (mode === 'voice') {
             setIsTyping(false);
         }
-        toast.info(`Switched to ${mode} mode`);
     };
 
-    // Update user answer when speech results change
+    if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
+
     useEffect(() => {
         if (results.length > 0 && inputMode === 'voice' && !isTyping) {
-            const transcript = results.map(result => result.transcript).join(' ');
-            setUserAnswer(transcript);
+            const latestResult = results[results.length - 1];
+            setUserAnswer(prevAns => prevAns + ' ' + latestResult.transcript);
         }
     }, [results, inputMode, isTyping]);
-
-    // Handle speech recognition errors
-    useEffect(() => {
-        if (error) {
-            console.error('Speech recognition error:', error);
-            toast.error(`Speech recognition error: ${error}`);
-        }
-    }, [error]);
-
-    // Check if speech recognition is supported
-    const isSpeechSupported = typeof window !== 'undefined' &&
-        ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
 
     return (
         <div className="p-4 bg-white dark:bg-gray-900 rounded-xl shadow-md max-w-md mx-auto space-y-4">
@@ -196,13 +165,12 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             <div className="flex justify-center gap-2 mb-4">
                 <button
                     onClick={() => handleModeSwitch('voice')}
-                    disabled={!isSpeechSupported}
                     className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${inputMode === 'voice'
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
-                        } ${!isSpeechSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        }`}
                 >
-                    🎤 Voice {!isSpeechSupported ? '(Not Supported)' : ''}
+                    🎤 Voice
                 </button>
                 <button
                     onClick={() => handleModeSwitch('text')}
@@ -215,17 +183,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                 </button>
             </div>
 
-            {/* Show message if speech is not supported and in voice mode */}
-            {!isSpeechSupported && inputMode === 'voice' && (
-                <div className="p-3 bg-yellow-100 dark:bg-yellow-900 rounded-lg mb-4">
-                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                        <strong>Speech recognition not supported in this browser.</strong>
-                        Please switch to text mode or use Chrome/Edge for voice recording.
-                    </p>
-                </div>
-            )}
-
-            {/* Text Input Section */}
+            {/* Text Input Section - Only show when in text mode */}
             {inputMode === 'text' && (
                 <div className="space-y-4">
                     <div>
@@ -250,9 +208,10 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                 </div>
             )}
 
-            {/* Voice Recording Section */}
-            {inputMode === 'voice' && isSpeechSupported && (
+            {/* Voice Recording Section - Only show when in voice mode */}
+            {inputMode === 'voice' && (
                 <>
+                    {/* Current answer display */}
                     {userAnswer && (
                         <div className="p-3 bg-gray-100 dark:bg-gray-800 rounded-lg mb-4">
                             <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -261,42 +220,30 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
                         </div>
                     )}
 
-                    {/* Show interim results while recording */}
-                    {isRecording && interimResult && (
-                        <div className="p-3 bg-blue-50 dark:bg-blue-900 rounded-lg mb-4">
-                            <p className="text-sm text-blue-700 dark:text-blue-300">
-                                <strong>Live transcript:</strong> {interimResult}
-                            </p>
-                        </div>
-                    )}
-
+                    {/* Recording status */}
                     {isRecording && (
                         <div className="flex items-center justify-center gap-2 mb-4 text-red-600">
                             <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
-                            <span className="text-sm font-medium">Recording... Speak clearly</span>
+                            <span className="text-sm font-medium">Recording...</span>
                         </div>
                     )}
 
+                    {/* Voice control buttons */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        {!isRecording ? (
-                            <button
-                                onClick={handleStartRecording}
-                                disabled={!interviewData?.mockId || isTyping}
-                                className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2"
-                                title={isTyping ? "Cannot record while typing" : ""}
-                            >
-                                <FaMicrophone />
-                                Start Recording
-                            </button>
-                        ) : (
-                            <button
-                                onClick={handleStopRecording}
-                                className="w-full sm:w-auto px-6 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2"
-                            >
-                                <FaStop />
-                                Stop Recording
-                            </button>
-                        )}
+                        <button
+                            onClick={isRecording ? saveUserAnswer : handleStartRecording}
+                            disabled={!interviewData?.mockId || isTyping}
+                            className={`w-full sm:w-auto px-6 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed
+                                ${isRecording
+                                    ? 'bg-red-600 hover:bg-red-700 text-white'
+                                    : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                                ${isTyping ? 'bg-gray-400' : ''}
+                            `}
+                            title={isTyping ? "Cannot record while typing" : ""}
+                        >
+                            {isRecording ? <FaStop /> : <FaMicrophone />}
+                            {isRecording ? 'Stop & Submit' : 'Start Recording'}
+                        </button>
 
                         {userAnswer && !isRecording && (
                             <button
@@ -315,17 +262,13 @@ const RecordAnswer = ({ questions, activeIndex, interviewData }) => {
             <div className="flex justify-center mt-4">
                 <button
                     onClick={() => {
+
                         console.log("Current Answer:", userAnswer);
                         console.log("Interview Data:", interviewData);
                         console.log("Active Question:", questions[activeIndex]);
                         console.log("Input Mode:", inputMode);
                         console.log("Is Typing:", isTyping);
                         console.log("Is Recording:", isRecording);
-                        console.log("Speech Recognition Supported:", isSpeechSupported);
-                        console.log("Speech Results:", results);
-                        console.log("Interim Result:", interimResult);
-                        console.log("Error:", error);
-                        toast.info('Debug info logged to console');
                     }}
                     className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition-all duration-200 text-sm"
                 >

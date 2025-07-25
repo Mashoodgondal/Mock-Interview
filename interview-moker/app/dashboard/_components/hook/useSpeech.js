@@ -5,6 +5,7 @@ const useSpeechToText = dynamic(
     { ssr: false }
 );
 
-export default useSpeechToText
+// export default useSpeechToText
+export default null
 // /app/_components/hook/useSpeech.js
 // export { default } from 'react-hook-speech-to-text';
