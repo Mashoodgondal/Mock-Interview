@@ -96,7 +96,7 @@ function StartInterview({ params }) {
                     interviewData={interviewData}
                 /> */}
                 <RecaurdAnswer
-                    questions={questions}
+                    questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     interviewData={interviewData}
                     onNextQuestion={() => setActiveIndex(prev => prev + 1)} // Add this
