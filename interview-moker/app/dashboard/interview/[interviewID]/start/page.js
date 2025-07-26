@@ -49,9 +49,6 @@ function StartInterview({ params }) {
     };
 
 
-
-
-
     const handleQuestionClick = (index) => {
         setActiveIndex(index);
     };
@@ -85,6 +82,7 @@ function StartInterview({ params }) {
         <div className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
+
                 <QuestionSection
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
@@ -92,14 +90,18 @@ function StartInterview({ params }) {
                     error={error}
                     onQuestion={handleQuestionClick}
                 />
-
-
-
-                <RecaurdAnswer
+                {/* <RecaurdAnswer
                     questions={mockInterviewQuestions}
                     activeIndex={activeIndex}
                     interviewData={interviewData}
+                /> */}
+                <RecaurdAnswer
+                    questions={questions}
+                    activeIndex={activeIndex}
+                    interviewData={interviewData}
+                    onNextQuestion={() => setActiveIndex(prev => prev + 1)} // Add this
                 />
+
 
             </div>
         </div>

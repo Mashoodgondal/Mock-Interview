@@ -5,7 +5,6 @@ import { FaVolumeHigh } from "react-icons/fa6";
 
 function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error }) {
 
-
     if (isLoading) {
         return (
             <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
