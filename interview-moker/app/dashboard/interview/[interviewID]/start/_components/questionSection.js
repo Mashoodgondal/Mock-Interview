@@ -76,7 +76,7 @@ function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error
                         <h2 className="text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100">
                             {questions[activeIndex]?.question || 'Question not available'}
                         </h2>
-                        <FaVolumeHigh className="cursor-pointer" onClick={() => textToSpeach(questions[activeIndex]?.question)} />
+                        <FaVolumeHigh size={25} className="cursor-pointer mt-6" onClick={() => textToSpeach(questions[activeIndex]?.question)} />
                     </div>
 
                 ) : (
