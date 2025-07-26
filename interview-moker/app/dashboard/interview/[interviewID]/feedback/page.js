@@ -305,8 +305,8 @@ import React, { useEffect, useState } from 'react'
 import { FaStar, FaRegStar, FaCheckCircle, FaTimesCircle, FaLightbulb, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { BiMessageSquareDetail } from 'react-icons/bi'
 import { MdQuestionAnswer } from 'react-icons/md'
-import { db } from '../../../../../../utils/db'
-import { userAnswer as userAnswerSchema } from '../../../../../../utils/schema'
+import { db } from '../../../../../utils/db'
+import { userAnswer as userAnswerSchema } from '../../../../../utils/schema'
 import { eq } from 'drizzle-orm'
 import { useUser } from '@clerk/nextjs'
 import toast from 'react-hot-toast'
@@ -487,8 +487,8 @@ const AnswerFeedback = ({ interviewData }) => {
                                 key={index}
                                 onClick={() => setCurrentIndex(index)}
                                 className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex
-                                        ? 'bg-blue-600'
-                                        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400'
+                                    ? 'bg-blue-600'
+                                    : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400'
                                     }`}
                             />
                         ))}
