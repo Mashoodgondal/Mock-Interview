@@ -288,10 +288,27 @@
 
 
 
-
-import React from 'react'
-
+"use client"
+import { db } from '../../../../../utils/db'
+import { userAnswer } from '../../../../../utils/schema'
+import React, { useEffect } from 'react'
+import { useParams } from 'next/navigation'
+import { eq } from 'drizzle-orm'
 const Feedback = () => {
+    useEffect(() => {
+        getFeedback()
+    }, [])
+    const params = useParams()
+    console.log("Route Params:", params);
+    const getFeedback = async () => {
+        //   const result= await db.select().from(userAnswer).where(eq(userAnswer.mockIdRef, mockId)).orderBy(userAnswer.id)
+        const result = await db.select().from(userAnswer).where(eq(userAnswer.mockIdRef, params.mockinterviewId)).orderBy(userAnswer.id)
+        console.log("mock ID:", params.mockinterviewId)
+
+        console.log("Above from result")
+        console.log(result);
+    }
+
     return (
         <div className='p-10'>
             <h1 className="p-3 text-green-400 text-2xl font-bold">Congratulations!</h1>
@@ -303,6 +320,14 @@ const Feedback = () => {
 }
 
 export default Feedback
+
+
+
+
+
+
+
+
 
 
 // "use client"

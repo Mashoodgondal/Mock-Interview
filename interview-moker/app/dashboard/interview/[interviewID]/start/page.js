@@ -3,21 +3,21 @@ import { db } from "../../../../../utils/db";
 import { MockInterview } from "../../../../../utils/schema";
 import { eq } from "drizzle-orm";
 import { useEffect, useState } from "react"
-// import { useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 
 import RecaurdAnswer from "./_components/recaurdAnswer";
 import QuestionSection from "./_components/questionSection";
 
 
-function StartInterview({ params }) {
+function StartInterview() {
     const [interviewData, setInterviewData] = useState(null);
     const [mockInterviewQuestions, setMockInterviewQuestions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
-
+    const params = useParams()
     useEffect(() => {
         console.log("params:", params);
         console.log("interviewID:", params?.interviewID);
