@@ -1,651 +1,458 @@
 // "use client"
-// import React, { useEffect, useState } from 'react'
 // import { db } from '../../../../../utils/db'
-// import { userAnswer as userAnswerSchema } from '../../../../../utils/schema'
+// import { userAnswer } from '../../../../../utils/schema'
+// import React, { useEffect } from 'react'
+// import { useParams } from 'next/navigation'
 // import { eq } from 'drizzle-orm'
-// import { useUser } from '@clerk/nextjs'
-// import { FaStar, FaRegStar, FaEye, FaEyeSlash, FaCalendarAlt, FaUser } from 'react-icons/fa'
-
-// const InterviewResults = ({ mockId, interviewData }) => {
-//     const { user } = useUser()
-//     const [results, setResults] = useState([])
-//     const [loading, setLoading] = useState(true)
-//     const [error, setError] = useState(null)
-//     const [expandedAnswers, setExpandedAnswers] = useState({})
-
-
+// const Feedback = () => {
 //     useEffect(() => {
-//         console.log("mockId:", mockId)
-//         if (mockId) {
-//             fetchResults()
-//         }
-//     }, [mockId])
+//         getFeedback()
+//     }, [])
+//     const params = useParams()
+//     console.log("Route Params:", params);
+//     const getFeedback = async () => {
 
-//     // useEffect(() => {
-//     //     if (mockId) {
-//     //         fetchResults()
-//     //     }
-//     // }, [mockId])
+//         const result = await db.select().from(userAnswer).where(eq(userAnswer.mockIdRef, params.mockinterviewId)).orderBy(userAnswer.id)
+//         console.log("mock ID:", params.mockinterviewId)
 
-//     const fetchResults = async () => {
-//         try {
-//             console.log("Fetching results for mockId:", mockId)
-//             setLoading(true)
-//             const response = await db
-//                 .select()
-//                 .from(userAnswerSchema)
-//                 .where(eq(userAnswerSchema.mockIdRef, mockId))
-
-//             setResults(response)
-//             setError(null)
-//         } catch (err) {
-//             console.error("Error fetching results:", err)
-//             setError("Failed to fetch interview results")
-//         } finally {
-//             setLoading(false)
-//         }
-//     }
-
-//     const toggleAnswer = (index, type) => {
-//         setExpandedAnswers(prev => ({
-//             ...prev,
-//             [`${index}-${type}`]: !prev[`${index}-${type}`]
-//         }))
-//     }
-
-//     const renderStars = (rating) => {
-//         const numRating = parseInt(rating) || 0
-//         return (
-//             <div className="flex items-center gap-1">
-//                 {[1, 2, 3, 4, 5].map((star) => (
-//                     <span key={star} className="text-yellow-400">
-//                         {star <= numRating ? <FaStar /> : <FaRegStar />}
-//                     </span>
-//                 ))}
-//                 <span className="ml-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-//                     {rating}/5
-//                 </span>
-//             </div>
-//         )
-//     }
-
-//     const getRatingColor = (rating) => {
-//         const numRating = parseInt(rating) || 0
-//         if (numRating >= 4) return 'text-green-600 bg-green-50 border-green-200'
-//         if (numRating >= 3) return 'text-yellow-600 bg-yellow-50 border-yellow-200'
-//         return 'text-red-600 bg-red-50 border-red-200'
-//     }
-
-//     const truncateText = (text, maxLength = 150) => {
-//         if (!text || text.length <= maxLength) return text
-//         return text.substring(0, maxLength) + '...'
-//     }
-
-//     const calculateOverallRating = () => {
-//         if (results.length === 0) return 0
-//         const total = results.reduce((sum, result) => sum + (parseInt(result.rating) || 0), 0)
-//         return (total / results.length).toFixed(1)
-//     }
-//     if (!mockId) {
-//         return (
-//             <div className="text-red-600 font-medium p-6 text-center">
-//                 Error: No mockId provided. Please return to the previous page and try again.
-//             </div>
-//         )
-//     }
-
-//     if (loading) {
-//         return (
-//             <div className="flex items-center justify-center min-h-[400px]">
-//                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-//                 <span className="ml-3 text-gray-600 dark:text-gray-400">Loading results...</span>
-//             </div>
-//         )
-//     }
-
-
-
-
-//     if (error) {
-//         return (
-//             <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-//                 <p className="text-red-600 font-medium">{error}</p>
-//                 <button
-//                     onClick={fetchResults}
-//                     className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-//                 >
-//                     Try Again
-//                 </button>
-//             </div>
-//         )
-//     }
-
-//     if (results.length === 0) {
-//         return (
-//             <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
-//                 <p className="text-gray-600 dark:text-gray-400 text-lg">No interview results found.</p>
-//                 <p className="text-gray-500 dark:text-gray-500 text-sm mt-2">Complete your interview to see results here.</p>
-//             </div>
-//         )
+//         console.log("Above from result")
+//         console.log(result);
 //     }
 
 //     return (
-//         <div className="max-w-4xl mx-auto p-6 space-y-6">
-//             {/* Header Section */}
-//             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-//                 <div className="flex items-center justify-between mb-4">
-//                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-//                         Interview Results
-//                     </h1>
-//                     <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-//                         <div className="flex items-center gap-1">
-//                             <FaUser />
-//                             <span>{user?.firstName || 'Anonymous'}</span>
-//                         </div>
-//                         <div className="flex items-center gap-1">
-//                             <FaCalendarAlt />
-//                             <span>{results[0]?.createdAt || 'N/A'}</span>
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 {/* Overall Stats */}
-//                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-//                     <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-//                         <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{results.length}</p>
-//                         <p className="text-sm text-gray-600 dark:text-gray-400">Questions Answered</p>
-//                     </div>
-//                     <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg text-center">
-//                         <p className="text-2xl font-bold text-green-600 dark:text-green-400">{calculateOverallRating()}</p>
-//                         <p className="text-sm text-gray-600 dark:text-gray-400">Average Rating</p>
-//                     </div>
-//                     <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg text-center">
-//                         <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-//                             {interviewData?.jobPosition || 'Interview'}
-//                         </p>
-//                         <p className="text-sm text-gray-600 dark:text-gray-400">Position</p>
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {/* Questions and Answers */}
-//             <div className="space-y-4">
-//                 {results.map((result, index) => (
-//                     <div key={index} className="bg-white dark:bg-gray-900 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-//                         {/* Question Header */}
-//                         <div className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-//                             <div className="flex items-center justify-between">
-//                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-//                                     Question {index + 1}
-//                                 </h3>
-//                                 <div className={`px-3 py-1 rounded-full border ${getRatingColor(result.rating)}`}>
-//                                     {renderStars(result.rating)}
-//                                 </div>
-//                             </div>
-//                             <p className="text-gray-700 dark:text-gray-300 mt-2 font-medium">
-//                                 {result.question}
-//                             </p>
-//                         </div>
-
-//                         <div className="p-6 space-y-6">
-//                             {/* User Answer */}
-//                             <div className="space-y-3">
-//                                 <div className="flex items-center justify-between">
-//                                     <h4 className="text-md font-semibold text-blue-600 dark:text-blue-400">
-//                                         Your Answer
-//                                     </h4>
-//                                     {result.userAns && result.userAns.length > 150 && (
-//                                         <button
-//                                             onClick={() => toggleAnswer(index, 'user')}
-//                                             className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-//                                         >
-//                                             {expandedAnswers[`${index}-user`] ? <FaEyeSlash /> : <FaEye />}
-//                                             {expandedAnswers[`${index}-user`] ? 'Show Less' : 'Show More'}
-//                                         </button>
-//                                     )}
-//                                 </div>
-//                                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-400">
-//                                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                         {expandedAnswers[`${index}-user`]
-//                                             ? result.userAns
-//                                             : truncateText(result.userAns)
-//                                         }
-//                                     </p>
-//                                 </div>
-//                             </div>
-
-//                             {/* Correct Answer */}
-//                             <div className="space-y-3">
-//                                 <div className="flex items-center justify-between">
-//                                     <h4 className="text-md font-semibold text-green-600 dark:text-green-400">
-//                                         Sample Answer
-//                                     </h4>
-//                                     {result.correctAnswer && result.correctAnswer.length > 150 && (
-//                                         <button
-//                                             onClick={() => toggleAnswer(index, 'correct')}
-//                                             className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-//                                         >
-//                                             {expandedAnswers[`${index}-correct`] ? <FaEyeSlash /> : <FaEye />}
-//                                             {expandedAnswers[`${index}-correct`] ? 'Show Less' : 'Show More'}
-//                                         </button>
-//                                     )}
-//                                 </div>
-//                                 <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border-l-4 border-green-400">
-//                                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                         {expandedAnswers[`${index}-correct`]
-//                                             ? result.correctAnswer
-//                                             : truncateText(result.correctAnswer)
-//                                         }
-//                                     </p>
-//                                 </div>
-//                             </div>
-
-//                             {/* Feedback */}
-//                             <div className="space-y-3">
-//                                 <h4 className="text-md font-semibold text-purple-600 dark:text-purple-400">
-//                                     Feedback
-//                                 </h4>
-//                                 <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-400">
-//                                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                         {result.feedback}
-//                                     </p>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                 ))}
-//             </div>
-
-//             {/* Action Buttons */}
-//             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-//                 <button
-//                     onClick={() => window.print()}
-//                     className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
-//                 >
-//                     Print Results
-//                 </button>
-//                 <button
-//                     onClick={fetchResults}
-//                     className="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200"
-//                 >
-//                     Refresh Results
-//                 </button>
-//             </div>
-
-
-
-
-
-
-
+//         <div className='p-10'>
+//             <h1 className="p-3 text-green-400 text-2xl font-bold">Congratulations!</h1>
+//             <h2 className='font-bold text-2xl'>Here is your interview feedback</h2>
+//             <h2 className='text-purple-400 font-semibold py-3'>Your overall interview rating:<strong>7/10</strong></h2>
+//             <h2 className='text-sm'>Find below interview questions with correct answers, Your answer and feedback for Improvement</h2>
 //         </div>
 //     )
 // }
 
-// export default InterviewResults
-
-
-
-
-
-"use client"
-import { db } from '../../../../../utils/db'
-import { userAnswer } from '../../../../../utils/schema'
-import React, { useEffect } from 'react'
-import { useParams } from 'next/navigation'
-import { eq } from 'drizzle-orm'
-const Feedback = () => {
-    useEffect(() => {
-        getFeedback()
-    }, [])
-    const params = useParams()
-    console.log("Route Params:", params);
-    const getFeedback = async () => {
-        //   const result= await db.select().from(userAnswer).where(eq(userAnswer.mockIdRef, mockId)).orderBy(userAnswer.id)
-        const result = await db.select().from(userAnswer).where(eq(userAnswer.mockIdRef, params.mockinterviewId)).orderBy(userAnswer.id)
-        console.log("mock ID:", params.mockinterviewId)
-
-        console.log("Above from result")
-        console.log(result);
-    }
-
-    return (
-        <div className='p-10'>
-            <h1 className="p-3 text-green-400 text-2xl font-bold">Congratulations!</h1>
-            <h2 className='font-bold text-2xl'>Here is your interview feedback</h2>
-            <h2 className='text-purple-400 font-semibold py-3'>Your overall interview rating:<strong>7/10</strong></h2>
-            <h2 className='text-sm'>Find below interview questions with correct answers, Your answer and feedback for Improvement</h2>
-        </div>
-    )
-}
-
-export default Feedback
-
-
-
-
-
-
+// export default Feedback
 
 
 
 
 // "use client"
-// import React, { useEffect, useState } from 'react'
-// import { FaStar, FaRegStar, FaCheckCircle, FaTimesCircle, FaLightbulb, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-// import { BiMessageSquareDetail } from 'react-icons/bi'
-// import { MdQuestionAnswer } from 'react-icons/md'
 // import { db } from '../../../../../utils/db'
-// import { userAnswer as userAnswerSchema } from '../../../../../utils/schema'
+// import { userAnswer } from '../../../../../utils/schema'
+// import React, { useEffect, useState } from 'react'
+// import { useParams } from 'next/navigation'
 // import { eq } from 'drizzle-orm'
-// import { useUser } from '@clerk/nextjs'
-// import toast from 'react-hot-toast'
 
-// const AnswerFeedback = ({ interviewData }) => {
-//     const { user } = useUser()
+// const Feedback = () => {
 //     const [feedbackData, setFeedbackData] = useState([])
 //     const [loading, setLoading] = useState(true)
-//     const [currentIndex, setCurrentIndex] = useState(0)
-//     const [overallStats, setOverallStats] = useState({
-//         averageRating: 0,
-//         totalQuestions: 0,
-//         strongPoints: 0,
-//         improvementAreas: 0
-//     })
+//     const params = useParams()
 
-//     // Fetch feedback data from database
 //     useEffect(() => {
-//         const fetchFeedbackData = async () => {
-//             if (!interviewData?.mockId || !user?.primaryEmailAddress?.emailAddress) {
-//                 setLoading(false)
-//                 return
-//             }
+//         getFeedback()
+//     }, [])
 
-//             try {
-//                 const result = await db
-//                     .select()
-//                     .from(userAnswerSchema)
-//                     .where(eq(userAnswerSchema.mockIdRef, interviewData.mockId))
+//     const getFeedback = async () => {
+//         try {
+//             console.log("Route Params:", params);
+//             console.log("Mock ID from params:", params.interviewID);
+//             console.log("Type of mockinterviewId:", typeof params.interviewID);
 
-//                 console.log('Fetched feedback data:', result)
-//                 setFeedbackData(result || [])
+//             // First, let's check if there are any records at all
+//             const allRecords = await db.select().from(userAnswer);
+//             console.log("All records in userAnswer table:", allRecords);
 
-//                 // Calculate overall statistics
-//                 if (result && result.length > 0) {
-//                     const totalRating = result.reduce((sum, item) => sum + parseInt(item.rating || 0), 0)
-//                     const avgRating = totalRating / result.length
-//                     const strongPoints = result.filter(item => parseInt(item.rating || 0) >= 4).length
-//                     const improvementAreas = result.filter(item => parseInt(item.rating || 0) < 4).length
+//             // Check if mockinterviewId exists and what type it should be
+//             const mockId = params.interviewID;
+//             console.log("Searching for mockId:", mockId);
 
-//                     setOverallStats({
-//                         averageRating: avgRating.toFixed(1),
-//                         totalQuestions: result.length,
-//                         strongPoints,
-//                         improvementAreas
-//                     })
-//                 }
-//             } catch (error) {
-//                 console.error('Error fetching feedback data:', error)
-//                 toast.error('Failed to load feedback data')
-//             } finally {
-//                 setLoading(false)
-//             }
+//             const result = await db.select()
+//                 .from(userAnswer)
+//                 .where(eq(userAnswer.mockIdRef, mockId))
+//                 .orderBy(userAnswer.id);
+
+//             console.log("Filtered result:", result);
+//             console.log("Result length:", result.length);
+
+//             setFeedbackData(result);
+//             setLoading(false);
+
+//         } catch (error) {
+//             console.error("Error fetching feedback:", error);
+//             setLoading(false);
 //         }
-
-//         fetchFeedbackData()
-//     }, [interviewData?.mockId, user?.primaryEmailAddress?.emailAddress])
-
-//     // Render star rating
-//     const renderStarRating = (rating) => {
-//         const numRating = parseInt(rating || 0)
-//         const stars = []
-//         for (let i = 1; i <= 5; i++) {
-//             stars.push(
-//                 i <= numRating ? (
-//                     <FaStar key={i} className="text-yellow-400" />
-//                 ) : (
-//                     <FaRegStar key={i} className="text-gray-300" />
-//                 )
-//             )
-//         }
-//         return stars
-//     }
-
-//     // Get rating color based on score
-//     const getRatingColor = (rating) => {
-//         const numRating = parseInt(rating || 0)
-//         if (numRating >= 4) return 'text-green-600 bg-green-100'
-//         if (numRating >= 3) return 'text-yellow-600 bg-yellow-100'
-//         return 'text-red-600 bg-red-100'
-//     }
-
-//     // Get rating status
-//     const getRatingStatus = (rating) => {
-//         const numRating = parseInt(rating || 0)
-//         if (numRating >= 4) return { icon: FaCheckCircle, text: 'Strong Answer', color: 'text-green-600' }
-//         if (numRating >= 3) return { icon: FaLightbulb, text: 'Good Progress', color: 'text-yellow-600' }
-//         return { icon: FaTimesCircle, text: 'Needs Improvement', color: 'text-red-600' }
-//     }
-
-//     // Navigation handlers
-//     const goToPrevious = () => {
-//         setCurrentIndex(prev => prev > 0 ? prev - 1 : feedbackData.length - 1)
-//     }
-
-//     const goToNext = () => {
-//         setCurrentIndex(prev => prev < feedbackData.length - 1 ? prev + 1 : 0)
 //     }
 
 //     if (loading) {
-//         return (
-//             <div className="max-w-4xl mx-auto p-6">
-//                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
-//                     <div className="flex items-center justify-center">
-//                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-//                         <span className="ml-4 text-lg text-gray-600 dark:text-gray-300">Loading feedback...</span>
-//                     </div>
-//                 </div>
-//             </div>
-//         )
+//         return <div>Loading...</div>
 //     }
-
-//     if (!feedbackData.length) {
-//         return (
-//             <div className="max-w-4xl mx-auto p-6">
-//                 <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8 text-center">
-//                     <BiMessageSquareDetail className="mx-auto text-6xl text-gray-400 mb-4" />
-//                     <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-//                         No Feedback Available
-//                     </h3>
-//                     <p className="text-gray-500 dark:text-gray-400">
-//                         Complete some interview questions to see your feedback here.
-//                     </p>
-//                 </div>
-//             </div>
-//         )
-//     }
-
-//     const currentFeedback = feedbackData[currentIndex]
-//     const StatusIcon = getRatingStatus(currentFeedback.rating).icon
 
 //     return (
-//         <div className="max-w-4xl mx-auto p-6 space-y-6">
-//             {/* Header with Overall Stats */}
-//             <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
-//                 <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-//                     <MdQuestionAnswer className="text-3xl" />
-//                     Interview Feedback Summary
-//                 </h2>
-//                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-//                     <div className="bg-white/20 rounded-lg p-4 text-center">
-//                         <div className="text-2xl font-bold">{overallStats.totalQuestions}</div>
-//                         <div className="text-sm opacity-90">Total Questions</div>
-//                     </div>
-//                     <div className="bg-white/20 rounded-lg p-4 text-center">
-//                         <div className="text-2xl font-bold">{overallStats.averageRating}/5</div>
-//                         <div className="text-sm opacity-90">Average Rating</div>
-//                     </div>
-//                     <div className="bg-white/20 rounded-lg p-4 text-center">
-//                         <div className="text-2xl font-bold text-green-300">{overallStats.strongPoints}</div>
-//                         <div className="text-sm opacity-90">Strong Answers</div>
-//                     </div>
-//                     <div className="bg-white/20 rounded-lg p-4 text-center">
-//                         <div className="text-2xl font-bold text-yellow-300">{overallStats.improvementAreas}</div>
-//                         <div className="text-sm opacity-90">Can Improve</div>
-//                     </div>
-//                 </div>
+//         <div className='p-10'>
+//             <h1 className="p-3 text-green-400 text-2xl font-bold">Congratulations!</h1>
+//             <h2 className='font-bold text-2xl'>Here is your interview feedback</h2>
+//             <h2 className='text-purple-400 font-semibold py-3'>Your overall interview rating:<strong>7/10</strong></h2>
+//             <h2 className='text-sm'>Find below interview questions with correct answers, Your answer and feedback for Improvement</h2>
+
+//             {/* Debug information */}
+//             <div className="mt-5 p-4 bg-gray-100 rounded">
+//                 <h3 className="font-bold">Debug Info:</h3>
+//                 <p>Mock ID: {params.interviewID}</p>
+//                 <p>Records found: {feedbackData.length}</p>
 //             </div>
 
-//             {/* Navigation */}
-//             <div className="flex items-center justify-between bg-white dark:bg-gray-900 rounded-xl shadow-lg p-4">
-//                 <button
-//                     onClick={goToPrevious}
-//                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
-//                     disabled={feedbackData.length <= 1}
-//                 >
-//                     <FaChevronLeft />
-//                     Previous
-//                 </button>
+//             {/* Display feedback data */}
+//             <div className="mt-5">
+//                 {feedbackData.length > 0 ? (
+//                     feedbackData.map((item, index) => (
+//                         <div key={item.id} className="mb-4 p-4 border rounded">
+//                             <h3 className="font-bold">Question {index + 1}:</h3>
+//                             <p className="text-gray-700">{item.question}</p>
 
-//                 <div className="flex items-center gap-2">
-//                     <span className="text-sm text-gray-600 dark:text-gray-400">
-//                         Question {currentIndex + 1} of {feedbackData.length}
-//                     </span>
-//                     <div className="flex gap-1">
-//                         {feedbackData.map((_, index) => (
-//                             <button
-//                                 key={index}
-//                                 onClick={() => setCurrentIndex(index)}
-//                                 className={`w-3 h-3 rounded-full transition-colors ${index === currentIndex
-//                                     ? 'bg-blue-600'
-//                                     : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400'
-//                                     }`}
-//                             />
-//                         ))}
-//                     </div>
-//                 </div>
+//                             <h4 className="font-semibold mt-2">Your Answer:</h4>
+//                             <p className="text-blue-600">{item.userAns}</p>
 
-//                 <button
-//                     onClick={goToNext}
-//                     className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
-//                     disabled={feedbackData.length <= 1}
-//                 >
-//                     Next
-//                     <FaChevronRight />
-//                 </button>
-//             </div>
+//                             <h4 className="font-semibold mt-2">Correct Answer:</h4>
+//                             <p className="text-green-600">{item.correctAnswer}</p>
 
-//             {/* Main Feedback Card */}
-//             <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden">
-//                 {/* Question Section */}
-//                 <div className="bg-blue-50 dark:bg-blue-900/50 p-6 border-b border-gray-200 dark:border-gray-700">
-//                     <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">
-//                         Question {currentIndex + 1}
-//                     </h3>
-//                     <p className="text-gray-700 dark:text-gray-300 text-base leading-relaxed">
-//                         {currentFeedback.question}
-//                     </p>
-//                 </div>
+//                             <h4 className="font-semibold mt-2">Feedback:</h4>
+//                             <p className="text-purple-600">{item.feedback}</p>
 
-//                 {/* Rating and Status */}
-//                 <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-//                     <div className="flex items-center justify-between mb-4">
-//                         <div className="flex items-center gap-3">
-//                             <StatusIcon className={`text-2xl ${getRatingStatus(currentFeedback.rating).color}`} />
-//                             <div>
-//                                 <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getRatingColor(currentFeedback.rating)}`}>
-//                                     {getRatingStatus(currentFeedback.rating).text}
-//                                 </div>
-//                                 <div className="flex items-center gap-1 mt-1">
-//                                     {renderStarRating(currentFeedback.rating)}
-//                                     <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
-//                                         ({currentFeedback.rating}/5)
-//                                     </span>
-//                                 </div>
-//                             </div>
+//                             <h4 className="font-semibold mt-2">Rating:</h4>
+//                             <p className="text-orange-600">{item.rating}</p>
 //                         </div>
-//                         <div className="text-right">
-//                             <div className="text-sm text-gray-500 dark:text-gray-400">Submitted on</div>
-//                             <div className="font-medium text-gray-700 dark:text-gray-300">
-//                                 {currentFeedback.createdAt}
-//                             </div>
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 {/* Answers Section */}
-//                 <div className="p-6 space-y-6">
-//                     {/* Your Answer */}
-//                     <div className="space-y-3">
-//                         <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-//                             <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-//                             Your Answer
-//                         </h4>
-//                         <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-4">
-//                             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                 {currentFeedback.userAns || 'No answer provided'}
-//                             </p>
-//                         </div>
-//                     </div>
-
-//                     {/* Expected Answer */}
-//                     <div className="space-y-3">
-//                         <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-//                             <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-//                             Expected Answer
-//                         </h4>
-//                         <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-4">
-//                             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                 {currentFeedback.correctAnswer || 'No expected answer available'}
-//                             </p>
-//                         </div>
-//                     </div>
-
-//                     {/* AI Feedback */}
-//                     <div className="space-y-3">
-//                         <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
-//                             <FaLightbulb className="text-yellow-500" />
-//                             AI Feedback & Suggestions
-//                         </h4>
-//                         <div className="bg-yellow-50 dark:bg-yellow-900/30 rounded-lg p-4 border-l-4 border-yellow-400">
-//                             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-//                                 {currentFeedback.feedback || 'No feedback available'}
-//                             </p>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {/* Action Buttons */}
-//             <div className="flex flex-wrap gap-4 justify-center">
-//                 <button
-//                     onClick={() => {
-//                         toast.success('Feedback exported to console!')
-//                         console.log('Current Feedback Data:', currentFeedback)
-//                     }}
-//                     className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium"
-//                 >
-//                     Export Feedback
-//                 </button>
-//                 <button
-//                     onClick={() => {
-//                         const feedbackText = `Question: ${currentFeedback.question}\n\nYour Answer: ${currentFeedback.userAns}\n\nFeedback: ${currentFeedback.feedback}\n\nRating: ${currentFeedback.rating}/5`
-//                         navigator.clipboard.writeText(feedbackText)
-//                         toast.success('Feedback copied to clipboard!')
-//                     }}
-//                     className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium"
-//                 >
-//                     Copy Feedback
-//                 </button>
-//                 <button
-//                     onClick={() => window.print()}
-//                     className="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium"
-//                 >
-//                     Print Report
-//                 </button>
+//                     ))
+//                 ) : (
+//                     <p>No feedback data found for this interview.</p>
+//                 )}
 //             </div>
 //         </div>
 //     )
 // }
 
-// export default AnswerFeedback
+// export default Feedback
+
+
+"use client"
+import { db } from '../../../../../utils/db'
+import { userAnswer } from '../../../../../utils/schema'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
+import { eq } from 'drizzle-orm'
+import {
+    IoChevronDown,
+    IoChevronUp,
+    IoTrophy,
+    IoTarget,
+    IoChatbubble,
+    IoStar,
+    IoTrendingUp,
+    IoSunny,
+    IoMoon
+} from 'react-icons'
+
+const Feedback = () => {
+    const [feedbackData, setFeedbackData] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [expandedItems, setExpandedItems] = useState({})
+    const [isDarkMode, setIsDarkMode] = useState(false)
+    const params = useParams()
+
+    useEffect(() => {
+        getFeedback()
+        // Check for system preference or stored theme
+        const savedTheme = localStorage.getItem('theme')
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        setIsDarkMode(savedTheme === 'dark' || (!savedTheme && systemPrefersDark))
+    }, [])
+
+    const getFeedback = async () => {
+        try {
+            console.log("Route Params:", params);
+            console.log("Mock ID from params:", params.interviewID);
+
+            const allRecords = await db.select().from(userAnswer);
+            console.log("All records in userAnswer table:", allRecords);
+
+            const mockId = params.interviewID;
+            console.log("Searching for mockId:", mockId);
+
+            const result = await db.select()
+                .from(userAnswer)
+                .where(eq(userAnswer.mockIdRef, mockId))
+                .orderBy(userAnswer.id);
+
+            console.log("Filtered result:", result);
+            setFeedbackData(result);
+            setLoading(false);
+
+        } catch (error) {
+            console.error("Error fetching feedback:", error);
+            setLoading(false);
+        }
+    }
+
+    const toggleExpanded = (index) => {
+        setExpandedItems(prev => ({
+            ...prev,
+            [index]: !prev[index]
+        }))
+    }
+
+    const toggleTheme = () => {
+        const newTheme = !isDarkMode
+        setIsDarkMode(newTheme)
+        localStorage.setItem('theme', newTheme ? 'dark' : 'light')
+    }
+
+    const calculateOverallRating = () => {
+        if (feedbackData.length === 0) return 0
+
+        const totalRating = feedbackData.reduce((sum, item) => {
+            const rating = parseFloat(item.rating) || 0
+            return sum + rating
+        }, 0)
+
+        return (totalRating / feedbackData.length).toFixed(1)
+    }
+
+    const getRatingColor = (rating) => {
+        const numRating = parseFloat(rating)
+        if (numRating >= 8) return 'text-green-500'
+        if (numRating >= 6) return 'text-yellow-500'
+        if (numRating >= 4) return 'text-orange-500'
+        return 'text-red-500'
+    }
+
+    const getOverallRatingColor = (rating) => {
+        const numRating = parseFloat(rating)
+        if (numRating >= 8) return 'from-green-500 to-emerald-600'
+        if (numRating >= 6) return 'from-yellow-500 to-orange-500'
+        if (numRating >= 4) return 'from-orange-500 to-red-500'
+        return 'from-red-500 to-red-700'
+    }
+
+    if (loading) {
+        return (
+            <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+                <div className="flex flex-col items-center space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} font-medium`}>Loading your feedback...</p>
+                </div>
+            </div>
+        )
+    }
+
+    const overallRating = calculateOverallRating()
+
+    return (
+        <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+            {/* Header */}
+            <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b transition-colors duration-300`}>
+                <div className="max-w-4xl mx-auto px-6 py-6">
+                    <div className="flex justify-between items-center mb-4">
+                        <div className="flex items-center space-x-3">
+                            <IoTrophy className="h-8 w-8 text-green-500" />
+                            <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                Interview Complete!
+                            </h1>
+                        </div>
+
+                        {/* Theme Toggle */}
+                        <button
+                            onClick={toggleTheme}
+                            className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode
+                                ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400'
+                                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                                }`}
+                        >
+                            {isDarkMode ? <IoMoon /> : <IoSunny />}
+                        </button>
+                    </div>
+
+                    <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
+                        Congratulations on completing your interview! Here's your detailed feedback.
+                    </p>
+
+                    {/* Overall Rating Card */}
+                    <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-white'} rounded-xl p-6 shadow-lg border ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-4">
+                                <div className={`p-3 rounded-full bg-gradient-to-r ${getOverallRatingColor(overallRating)}`}>
+                                    <IoTrendingUp className="h-6 w-6 text-white" />
+                                </div>
+                                <div>
+                                    <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                        Overall Performance
+                                    </h3>
+                                    <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                        Based on {feedbackData.length} questions
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <div className={`text-4xl font-bold bg-gradient-to-r ${getOverallRatingColor(overallRating)} bg-clip-text text-transparent`}>
+                                    {overallRating}/10
+                                </div>
+                                <div className="flex items-center mt-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <IoStar
+                                            key={i}
+                                            className={`h-4 w-4 ${i < Math.round(overallRating / 2)
+                                                ? 'text-yellow-400'
+                                                : isDarkMode ? 'text-gray-600' : 'text-gray-300'
+                                                }`}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-4xl mx-auto px-6 py-8">
+                {feedbackData.length > 0 ? (
+                    <div className="space-y-6">
+                        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
+                            Question-wise Analysis
+                        </h2>
+
+                        {feedbackData.map((item, index) => {
+                            const isExpanded = expandedItems[index]
+                            const rating = parseFloat(item.rating) || 0
+
+                            return (
+                                <div
+                                    key={item.id}
+                                    className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md`}
+                                >
+                                    {/* Question Header */}
+                                    <div
+                                        className="p-6 cursor-pointer"
+                                        onClick={() => toggleExpanded(index)}
+                                    >
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center space-x-4 flex-1">
+                                                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                                                    <span className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
+                                                        {index + 1}
+                                                    </span>
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h3 className={`font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'} line-clamp-2`}>
+                                                        {item.question}
+                                                    </h3>
+                                                    {!isExpanded && (
+                                                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm mt-1`}>
+                                                            Click to view detailed feedback
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center space-x-4 ml-4">
+                                                <div className="text-right">
+                                                    <div className={`text-2xl font-bold ${getRatingColor(item.rating)}`}>
+                                                        {rating}/10
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        {[...Array(5)].map((_, i) => (
+                                                            <Star
+                                                                key={i}
+                                                                className={`h-3 w-3 ${i < Math.round(rating / 2)
+                                                                    ? 'text-yellow-400 fill-current'
+                                                                    : isDarkMode ? 'text-gray-600' : 'text-gray-300'
+                                                                    }`}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                {isExpanded ? (
+                                                    <IoChevronUp className={`h-6 w-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                                ) : (
+                                                    <IoChevronDown className={`h-6 w-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Expanded Content */}
+                                    {isExpanded && (
+                                        <div className={`px-6 pb-6 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                            <div className="pt-6 space-y-6">
+                                                {/* Your Answer */}
+                                                <div>
+                                                    <div className="flex items-center space-x-2 mb-3">
+                                                        <IoChatbubble className="h-5 w-5 text-blue-500" />
+                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                            Your Answer
+                                                        </h4>
+                                                    </div>
+                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-blue-900/20 border-blue-800' : 'bg-blue-50 border-blue-200'} border`}>
+                                                        <p className={`${isDarkMode ? 'text-blue-200' : 'text-blue-800'} leading-relaxed`}>
+                                                            {item.userAns || 'No answer provided'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Correct Answer */}
+                                                <div>
+                                                    <div className="flex items-center space-x-2 mb-3">
+                                                        <IoTarget className="h-5 w-5 text-green-500" />
+                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                            Recommended Answer
+                                                        </h4>
+                                                    </div>
+                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-green-900/20 border-green-800' : 'bg-green-50 border-green-200'} border`}>
+                                                        <p className={`${isDarkMode ? 'text-green-200' : 'text-green-800'} leading-relaxed`}>
+                                                            {item.correctAnswer}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Feedback */}
+                                                <div>
+                                                    <div className="flex items-center space-x-2 mb-3">
+                                                        <IoTrophy className="h-5 w-5 text-purple-500" />
+                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                            Feedback & Improvement Tips
+                                                        </h4>
+                                                    </div>
+                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-purple-900/20 border-purple-800' : 'bg-purple-50 border-purple-200'} border`}>
+                                                        <p className={`${isDarkMode ? 'text-purple-200' : 'text-purple-800'} leading-relaxed`}>
+                                                            {item.feedback}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </div>
+                ) : (
+                    <div className={`text-center py-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl`}>
+                        <IoChatbubble className={`h-16 w-16 mx-auto mb-4 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+                        <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                            No Feedback Available
+                        </h3>
+                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                            No feedback data found for this interview.
+                        </p>
+                    </div>
+                )}
+
+                {/* Debug Information (only show in development) */}
+                {process.env.NODE_ENV === 'development' && (
+                    <div className={`mt-8 p-4 rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'} border`}>
+                        <h3 className={`font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Debug Info:</h3>
+                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Mock ID: {params.interviewID}</p>
+                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Records found: {feedbackData.length}</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    )
+}
+
+export default Feedback
