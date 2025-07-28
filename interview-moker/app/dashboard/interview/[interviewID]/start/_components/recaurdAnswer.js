@@ -1698,13 +1698,14 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
             `Question: ${questions[activeIndex]?.question}\n` +
             `User Answer: ${userAnswer}\n\n` +
             `Guidelines:\n` +
-            `- Rate 3-5 (avoid low ratings unless answer is completely off-topic)\n` +
+            `- Rate from 1 to 10 (1 = poor, 10 = excellent)\n` +
+            `- Be encouraging but honest\n` +
             `- Keep feedback under 25 words\n` +
             `- Start with something positive\n` +
-            `- Give one specific improvement tip if needed\n` +
-            `- Don't compare to a "correct" answer - evaluate communication quality\n\n` +
-            `Return JSON: {"rating": "3-5", "feedback": "brief positive feedback with one improvement tip"}\n` +
-            `Example: {"rating": "4", "feedback": "Clear explanation with good examples. Consider adding more specific details to strengthen your points."}`
+            `- Include one specific improvement suggestion if needed\n` +
+            `- Do not focus on factual correctness; judge delivery and communication\n\n` +
+            `Return JSON: {"rating": "1-10", "feedback": "brief positive feedback with one improvement tip"}\n` +
+            `Example: {"rating": "7", "feedback": "Good structure and tone. Work on being more concise in your responses."}`;
 
         try {
             // Show loading toast

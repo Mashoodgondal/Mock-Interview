@@ -5,20 +5,34 @@ import { FaVolumeHigh } from "react-icons/fa6";
 
 function QuestionsSection({ questions, activeIndex, onQuestion, isLoading, error }) {
 
+    // if (isLoading) {
+    //     return (
+    //         <div className="p-20 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
+    //             <div className="animate-pulse">
+    //                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    //                     {[...Array(6)].map((_, i) => (
+    //                         <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+    //                     ))}
+    //                 </div>
+    //                 <div className="mt-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+    //             </div>
+    //         </div>
+    //     );
+    // }
+
     if (isLoading) {
         return (
-            <div className="p-5 border rounded-lg bg-white dark:bg-gray-800 shadow-sm">
-                <div className="animate-pulse">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                        ))}
-                    </div>
-                    <div className="mt-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div className="p-5 border rounded-lg bg-white dark:bg-gray-400 shadow-sm min-h-[600px]">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {[...Array(6)].map((_, i) => (
+                        <div key={i} className="h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                    ))}
                 </div>
+                <div className="mt-6 h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 animate-pulse"></div>
             </div>
         );
     }
+
 
     if (error) {
         return (

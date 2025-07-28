@@ -129,53 +129,36 @@
 // }
 
 // export default Feedback
-
 "use client"
 import { db } from '../../../../../utils/db'
 import { userAnswer } from '../../../../../utils/schema'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { eq } from 'drizzle-orm'
-// No icon imports needed
 
 const Feedback = () => {
     const [feedbackData, setFeedbackData] = useState([])
     const [loading, setLoading] = useState(true)
     const [expandedItems, setExpandedItems] = useState({})
-    const [isDarkMode, setIsDarkMode] = useState(false)
     const params = useParams()
 
     useEffect(() => {
         getFeedback()
-        // Check for system preference or stored theme
-        const savedTheme = localStorage.getItem('theme')
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        setIsDarkMode(savedTheme === 'dark' || (!savedTheme && systemPrefersDark))
     }, [])
 
     const getFeedback = async () => {
         try {
-            console.log("Route Params:", params);
-            console.log("Mock ID from params:", params.interviewID);
-
-            const allRecords = await db.select().from(userAnswer);
-            console.log("All records in userAnswer table:", allRecords);
-
-            const mockId = params.interviewID;
-            console.log("Searching for mockId:", mockId);
-
+            const mockId = params.interviewID
             const result = await db.select()
                 .from(userAnswer)
                 .where(eq(userAnswer.mockIdRef, mockId))
-                .orderBy(userAnswer.id);
+                .orderBy(userAnswer.id)
 
-            console.log("Filtered result:", result);
-            setFeedbackData(result);
-            setLoading(false);
-
+            setFeedbackData(result)
+            setLoading(false)
         } catch (error) {
-            console.error("Error fetching feedback:", error);
-            setLoading(false);
+            console.error("Error fetching feedback:", error)
+            setLoading(false)
         }
     }
 
@@ -186,131 +169,96 @@ const Feedback = () => {
         }))
     }
 
-    const toggleTheme = () => {
-        const newTheme = !isDarkMode
-        setIsDarkMode(newTheme)
-        localStorage.setItem('theme', newTheme ? 'dark' : 'light')
-    }
-
     const calculateOverallRating = () => {
         if (feedbackData.length === 0) return 0
-
         const totalRating = feedbackData.reduce((sum, item) => {
             const rating = parseFloat(item.rating) || 0
             return sum + rating
         }, 0)
-
         return (totalRating / feedbackData.length).toFixed(1)
     }
 
-    const getRatingColor = (rating) => {
+    const getRatingLabel = (rating) => {
         const numRating = parseFloat(rating)
-        if (numRating >= 8) return 'text-green-500'
-        if (numRating >= 6) return 'text-yellow-500'
-        if (numRating >= 4) return 'text-orange-500'
-        return 'text-red-500'
+        if (numRating >= 9) return 'Excellent'
+        if (numRating >= 8) return 'Very Good'
+        if (numRating >= 7) return 'Good'
+        if (numRating >= 6) return 'Above Average'
+        if (numRating >= 5) return 'Average'
+        if (numRating >= 4) return 'Below Average'
+        if (numRating >= 3) return 'Poor'
+        return 'Very Poor'
     }
 
-    const getOverallRatingColor = (rating) => {
+    const getRatingColorClass = (rating) => {
         const numRating = parseFloat(rating)
-        if (numRating >= 8) return 'from-green-500 to-emerald-600'
-        if (numRating >= 6) return 'from-yellow-500 to-orange-500'
-        if (numRating >= 4) return 'from-orange-500 to-red-500'
-        return 'from-red-500 to-red-700'
+        if (numRating >= 8) return 'text-green-600 bg-green-50 border-green-200 dark:text-green-400 dark:bg-green-900/20 dark:border-green-800'
+        if (numRating >= 6) return 'text-blue-600 bg-blue-50 border-blue-200 dark:text-blue-400 dark:bg-blue-900/20 dark:border-blue-800'
+        if (numRating >= 4) return 'text-orange-600 bg-orange-50 border-orange-200 dark:text-orange-400 dark:bg-orange-900/20 dark:border-orange-800'
+        return 'text-red-600 bg-red-50 border-red-200 dark:text-red-400 dark:bg-red-900/20 dark:border-red-800'
     }
+
+    const getOverallRatingColorClass = (rating) => {
+        const numRating = parseFloat(rating)
+        if (numRating >= 8) return 'text-green-700 bg-green-100 border-green-300 dark:text-green-300 dark:bg-green-900/30 dark:border-green-700'
+        if (numRating >= 6) return 'text-blue-700 bg-blue-100 border-blue-300 dark:text-blue-300 dark:bg-blue-900/30 dark:border-blue-700'
+        if (numRating >= 4) return 'text-orange-700 bg-orange-100 border-orange-300 dark:text-orange-300 dark:bg-orange-900/30 dark:border-orange-700'
+        return 'text-red-700 bg-red-100 border-red-300 dark:text-red-300 dark:bg-red-900/30 dark:border-red-700'
+    }
+
+    const overallRating = calculateOverallRating()
 
     if (loading) {
         return (
-            <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
                 <div className="flex flex-col items-center space-y-4">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
-                    <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} font-medium`}>Loading your feedback...</p>
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-blue-600"></div>
+                    <p className="text-gray-600 dark:text-gray-400">Loading feedback...</p>
                 </div>
             </div>
         )
     }
 
-    const overallRating = calculateOverallRating()
-
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-            {/* Header */}
-            <div className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} border-b transition-colors duration-300`}>
-                <div className="max-w-4xl mx-auto px-6 py-6">
-                    <div className="flex justify-between items-center mb-4">
-                        <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">✓</span>
-                            </div>
-                            <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                Interview Complete!
-                            </h1>
-                        </div>
-
-                        {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode
-                                    ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400'
-                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
-                                }`}
-                        >
-                            <span className="text-lg">
-                                {isDarkMode ? '🌙' : '☀️'}
-                            </span>
-                        </button>
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            {/* Header Section */}
+            <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                <div className="max-w-5xl mx-auto px-6 py-8">
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                            Interview Assessment Complete
+                        </h1>
+                        <p className="text-lg text-gray-600 dark:text-gray-300">
+                            Here's your comprehensive performance analysis and feedback
+                        </p>
                     </div>
 
-                    <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
-                        Congratulations on completing your interview! Here's your detailed feedback.
-                    </p>
-
-                    {/* Overall Rating Card */}
-                    <div className={`${isDarkMode ? 'bg-gray-700' : 'bg-white'} rounded-xl p-6 shadow-lg border ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
-                                <div className={`p-3 rounded-full bg-gradient-to-r ${getOverallRatingColor(overallRating)}`}>
-                                    <span className="text-white font-bold text-lg">📈</span>
-                                </div>
-                                <div>
-                                    <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                        Overall Performance
-                                    </h3>
-                                    <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                                        Based on {feedbackData.length} questions
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <div className={`text-4xl font-bold bg-gradient-to-r ${getOverallRatingColor(overallRating)} bg-clip-text text-transparent`}>
-                                    {overallRating}/10
-                                </div>
-                                <div className="flex items-center mt-1">
-                                    {[...Array(5)].map((_, i) => (
-                                        <span
-                                            key={i}
-                                            className={`text-lg ${i < Math.round(overallRating / 2)
-                                                    ? 'text-yellow-400'
-                                                    : isDarkMode ? 'text-gray-600' : 'text-gray-300'
-                                                }`}
-                                        >
-                                            ⭐
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
+                    {/* Overall Performance Card */}
+                    <div className={`max-w-md mx-auto rounded-lg border-2 p-6 ${getOverallRatingColorClass(overallRating)}`}>
+                        <div className="text-center">
+                            <h2 className="text-xl font-semibold mb-2">Overall Performance</h2>
+                            <div className="text-5xl font-bold mb-2">{overallRating}/10</div>
+                            <div className="text-lg font-medium mb-1">{getRatingLabel(overallRating)}</div>
+                            <p className="text-sm opacity-75">
+                                Based on {feedbackData.length} question{feedbackData.length !== 1 ? 's' : ''}
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="max-w-4xl mx-auto px-6 py-8">
+            <div className="max-w-5xl mx-auto px-6 py-8">
                 {feedbackData.length > 0 ? (
                     <div className="space-y-6">
-                        <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'} mb-6`}>
-                            Question-wise Analysis
-                        </h2>
+                        <div className="flex items-center justify-between mb-8">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                Detailed Question Analysis
+                            </h2>
+                            <p className="text-gray-600 dark:text-gray-400">
+                                Click on any question to view detailed feedback
+                            </p>
+                        </div>
 
                         {feedbackData.map((item, index) => {
                             const isExpanded = expandedItems[index]
@@ -319,108 +267,74 @@ const Feedback = () => {
                             return (
                                 <div
                                     key={item.id}
-                                    className={`${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'} rounded-xl border shadow-sm transition-all duration-200 hover:shadow-md`}
+                                    className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200"
                                 >
                                     {/* Question Header */}
                                     <div
-                                        className="p-6 cursor-pointer"
+                                        className="p-6 cursor-pointer hover:bg-gray-500 dark:hover:bg-gray-700 transition-colors duration-150"
                                         onClick={() => toggleExpanded(index)}
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-4 flex-1">
-                                                <div className={`flex items-center justify-center w-10 h-10 rounded-full ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                                                    <span className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-700'}`}>
-                                                        {index + 1}
+                                        <div className="flex items-start justify-between">
+                                            <div className="flex-1">
+                                                <div className="flex items-center space-x-4 mb-3">
+                                                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full">
+                                                        Question {index + 1}
                                                     </span>
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h3 className={`font-semibold text-lg ${isDarkMode ? 'text-white' : 'text-gray-900'} line-clamp-2`}>
-                                                        {item.question}
-                                                    </h3>
-                                                    {!isExpanded && (
-                                                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm mt-1`}>
-                                                            Click to view detailed feedback
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center space-x-4 ml-4">
-                                                <div className="text-right">
-                                                    <div className={`text-2xl font-bold ${getRatingColor(item.rating)}`}>
-                                                        {rating}/10
-                                                    </div>
-                                                    <div className="flex items-center">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <Star
-                                                                key={i}
-                                                                className={`h-3 w-3 ${i < Math.round(rating / 2)
-                                                                        ? 'text-yellow-400 fill-current'
-                                                                        : isDarkMode ? 'text-gray-600' : 'text-gray-300'
-                                                                    }`}
-                                                            />
-                                                        ))}
+                                                    <div className={`px-3 py-1 rounded-full border text-sm font-medium ${getRatingColorClass(rating)}`}>
+                                                        {rating}/10 - {getRatingLabel(rating)}
                                                     </div>
                                                 </div>
-                                                {isExpanded ? (
-                                                    <button className={`px-2 py-1 rounded text-sm ${isDarkMode ? 'text-gray-400 bg-gray-700' : 'text-gray-500 bg-gray-100'}`}>
-                                                        ▲
-                                                    </button>
-                                                ) : (
-                                                    <button className={`px-2 py-1 rounded text-sm ${isDarkMode ? 'text-gray-400 bg-gray-700' : 'text-gray-500 bg-gray-100'}`}>
-                                                        ▼
-                                                    </button>
+                                                <h3 className="text-lg font-medium text-gray-900 dark:text-white leading-relaxed">
+                                                    {item.question}
+                                                </h3>
+                                                {!isExpanded && (
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                                        Expand to view your answer, recommended approach, and detailed feedback
+                                                    </p>
                                                 )}
                                             </div>
+                                            <button className="ml-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                                <span className="text-lg">{isExpanded ? '−' : '+'}</span>
+                                            </button>
                                         </div>
                                     </div>
 
                                     {/* Expanded Content */}
                                     {isExpanded && (
-                                        <div className={`px-6 pb-6 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                            <div className="pt-6 space-y-6">
-                                                {/* Your Answer */}
-                                                <div>
-                                                    <div className="flex items-center space-x-2 mb-3">
-                                                        <span className="text-blue-500 font-bold">💬</span>
-                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                            Your Answer
-                                                        </h4>
-                                                    </div>
-                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-blue-900/20 border-blue-800' : 'bg-blue-50 border-blue-200'} border`}>
-                                                        <p className={`${isDarkMode ? 'text-blue-200' : 'text-blue-800'} leading-relaxed`}>
-                                                            {item.userAns || 'No answer provided'}
-                                                        </p>
-                                                    </div>
+                                        <div className="border-t border-gray-200 dark:border-gray-700 p-6 space-y-6">
+                                            {/* Your Answer Section */}
+                                            <div>
+                                                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+                                                    Your Answer
+                                                </h4>
+                                                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                                        {item.userAns || 'No answer was provided for this question.'}
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                {/* Correct Answer */}
-                                                <div>
-                                                    <div className="flex items-center space-x-2 mb-3">
-                                                        <span className="text-green-500 font-bold">🎯</span>
-                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                            Recommended Answer
-                                                        </h4>
-                                                    </div>
-                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-green-900/20 border-green-800' : 'bg-green-50 border-green-200'} border`}>
-                                                        <p className={`${isDarkMode ? 'text-green-200' : 'text-green-800'} leading-relaxed`}>
-                                                            {item.correctAnswer}
-                                                        </p>
-                                                    </div>
+                                            {/* Recommended Answer Section */}
+                                            <div>
+                                                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+                                                    Recommended Answer
+                                                </h4>
+                                                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                                                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                                        {item.correctAnswer}
+                                                    </p>
                                                 </div>
+                                            </div>
 
-                                                {/* Feedback */}
-                                                <div>
-                                                    <div className="flex items-center space-x-2 mb-3">
-                                                        <span className="text-purple-500 font-bold">💡</span>
-                                                        <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                            Feedback & Improvement Tips
-                                                        </h4>
-                                                    </div>
-                                                    <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-purple-900/20 border-purple-800' : 'bg-purple-50 border-purple-200'} border`}>
-                                                        <p className={`${isDarkMode ? 'text-purple-200' : 'text-purple-800'} leading-relaxed`}>
-                                                            {item.feedback}
-                                                        </p>
-                                                    </div>
+                                            {/* Feedback Section */}
+                                            <div>
+                                                <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+                                                    Detailed Feedback & Improvement Suggestions
+                                                </h4>
+                                                <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                                                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                                                        {item.feedback}
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -430,23 +344,13 @@ const Feedback = () => {
                         })}
                     </div>
                 ) : (
-                    <div className={`text-center py-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl`}>
-                        <div className="text-6xl mb-4">📝</div>
-                        <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
                             No Feedback Available
                         </h3>
-                        <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            No feedback data found for this interview.
+                        <p className="text-gray-600 dark:text-gray-400">
+                            No feedback data was found for this interview session.
                         </p>
-                    </div>
-                )}
-
-                {/* Debug Information (only show in development) */}
-                {process.env.NODE_ENV === 'development' && (
-                    <div className={`mt-8 p-4 rounded-lg ${isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'} border`}>
-                        <h3 className={`font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Debug Info:</h3>
-                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Mock ID: {params.interviewID}</p>
-                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Records found: {feedbackData.length}</p>
                     </div>
                 )}
             </div>
