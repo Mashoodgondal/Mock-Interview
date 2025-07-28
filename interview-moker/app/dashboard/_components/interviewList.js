@@ -1,4 +1,8 @@
 "user client"
+"user client"
+"user client"
+"user client"
+"user client"
 import { db } from '@/utils/db'
 import { MockInterview } from '@/utils/schema'
 import { useUser } from '@clerk/nextjs'
