@@ -1,5 +1,6 @@
 import React from 'react'
 import NewInterview from './_components/addNewInterview'
+import InterviewList from './_components/interviewList'
 
 
 const Dashboard = () => {
@@ -11,7 +12,9 @@ const Dashboard = () => {
 
       <div className="mt-3 grid grid-cols-1 md:grid-cols-3">
         <NewInterview />
+
       </div>
+      <InterviewList />
     </div>
 
 
