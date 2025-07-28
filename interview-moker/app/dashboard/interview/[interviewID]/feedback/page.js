@@ -130,24 +130,13 @@
 
 // export default Feedback
 
-
 "use client"
 import { db } from '../../../../../utils/db'
 import { userAnswer } from '../../../../../utils/schema'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { eq } from 'drizzle-orm'
-import {
-    IoChevronDown,
-    IoChevronUp,
-    IoTrophy,
-    IoTarget,
-    IoChatbubble,
-    IoStar,
-    IoTrendingUp,
-    IoSunny,
-    IoMoon
-} from 'react-icons'
+// No icon imports needed
 
 const Feedback = () => {
     const [feedbackData, setFeedbackData] = useState([])
@@ -250,7 +239,9 @@ const Feedback = () => {
                 <div className="max-w-4xl mx-auto px-6 py-6">
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center space-x-3">
-                            <IoTrophy className="h-8 w-8 text-green-500" />
+                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <span className="text-white font-bold text-lg">✓</span>
+                            </div>
                             <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                 Interview Complete!
                             </h1>
@@ -260,11 +251,13 @@ const Feedback = () => {
                         <button
                             onClick={toggleTheme}
                             className={`p-2 rounded-lg transition-colors duration-200 ${isDarkMode
-                                ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400'
-                                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                                    ? 'bg-gray-700 hover:bg-gray-600 text-yellow-400'
+                                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
                                 }`}
                         >
-                            {isDarkMode ? <IoMoon /> : <IoSunny />}
+                            <span className="text-lg">
+                                {isDarkMode ? '🌙' : '☀️'}
+                            </span>
                         </button>
                     </div>
 
@@ -277,7 +270,7 @@ const Feedback = () => {
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <div className={`p-3 rounded-full bg-gradient-to-r ${getOverallRatingColor(overallRating)}`}>
-                                    <IoTrendingUp className="h-6 w-6 text-white" />
+                                    <span className="text-white font-bold text-lg">📈</span>
                                 </div>
                                 <div>
                                     <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -294,13 +287,15 @@ const Feedback = () => {
                                 </div>
                                 <div className="flex items-center mt-1">
                                     {[...Array(5)].map((_, i) => (
-                                        <IoStar
+                                        <span
                                             key={i}
-                                            className={`h-4 w-4 ${i < Math.round(overallRating / 2)
-                                                ? 'text-yellow-400'
-                                                : isDarkMode ? 'text-gray-600' : 'text-gray-300'
+                                            className={`text-lg ${i < Math.round(overallRating / 2)
+                                                    ? 'text-yellow-400'
+                                                    : isDarkMode ? 'text-gray-600' : 'text-gray-300'
                                                 }`}
-                                        />
+                                        >
+                                            ⭐
+                                        </span>
                                     ))}
                                 </div>
                             </div>
@@ -359,17 +354,21 @@ const Feedback = () => {
                                                             <Star
                                                                 key={i}
                                                                 className={`h-3 w-3 ${i < Math.round(rating / 2)
-                                                                    ? 'text-yellow-400 fill-current'
-                                                                    : isDarkMode ? 'text-gray-600' : 'text-gray-300'
+                                                                        ? 'text-yellow-400 fill-current'
+                                                                        : isDarkMode ? 'text-gray-600' : 'text-gray-300'
                                                                     }`}
                                                             />
                                                         ))}
                                                     </div>
                                                 </div>
                                                 {isExpanded ? (
-                                                    <IoChevronUp className={`h-6 w-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                                    <button className={`px-2 py-1 rounded text-sm ${isDarkMode ? 'text-gray-400 bg-gray-700' : 'text-gray-500 bg-gray-100'}`}>
+                                                        ▲
+                                                    </button>
                                                 ) : (
-                                                    <IoChevronDown className={`h-6 w-6 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                                    <button className={`px-2 py-1 rounded text-sm ${isDarkMode ? 'text-gray-400 bg-gray-700' : 'text-gray-500 bg-gray-100'}`}>
+                                                        ▼
+                                                    </button>
                                                 )}
                                             </div>
                                         </div>
@@ -382,7 +381,7 @@ const Feedback = () => {
                                                 {/* Your Answer */}
                                                 <div>
                                                     <div className="flex items-center space-x-2 mb-3">
-                                                        <IoChatbubble className="h-5 w-5 text-blue-500" />
+                                                        <span className="text-blue-500 font-bold">💬</span>
                                                         <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                                             Your Answer
                                                         </h4>
@@ -397,7 +396,7 @@ const Feedback = () => {
                                                 {/* Correct Answer */}
                                                 <div>
                                                     <div className="flex items-center space-x-2 mb-3">
-                                                        <IoTarget className="h-5 w-5 text-green-500" />
+                                                        <span className="text-green-500 font-bold">🎯</span>
                                                         <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                                             Recommended Answer
                                                         </h4>
@@ -412,7 +411,7 @@ const Feedback = () => {
                                                 {/* Feedback */}
                                                 <div>
                                                     <div className="flex items-center space-x-2 mb-3">
-                                                        <IoTrophy className="h-5 w-5 text-purple-500" />
+                                                        <span className="text-purple-500 font-bold">💡</span>
                                                         <h4 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                                                             Feedback & Improvement Tips
                                                         </h4>
@@ -432,7 +431,7 @@ const Feedback = () => {
                     </div>
                 ) : (
                     <div className={`text-center py-16 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl`}>
-                        <IoChatbubble className={`h-16 w-16 mx-auto mb-4 ${isDarkMode ? 'text-gray-600' : 'text-gray-400'}`} />
+                        <div className="text-6xl mb-4">📝</div>
                         <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                             No Feedback Available
                         </h3>
