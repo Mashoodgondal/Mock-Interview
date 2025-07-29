@@ -1567,8 +1567,7 @@ import chatSession from '../../../../../../utils/gemini';
 import { db } from '../../../../../../utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 
 const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion }) => {
     const { user } = useUser()
@@ -1576,7 +1575,9 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
     const [isTyping, setIsTyping] = useState(false)
     const [inputMode, setInputMode] = useState('voice')
     const [isClient, setIsClient] = useState(false)
+    const params = useParams()
     const router = useRouter()
+    const mockId = params?.mockId
     // Speech Recognition States
     const [isRecording, setIsRecording] = useState(false)
     const [speechSupported, setSpeechSupported] = useState(false)
@@ -1955,20 +1956,20 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
                 </>
             )}
 
-
-            <button
-                onClick={GotoResult}
-                className="px-5 py-2 rounded-lg font-semibold 
+            <div className="flex justify-center">
+                <button
+                    onClick={GotoResult}
+                    className="px-30 py-2  rounded-lg font-semibold 
              text-white bg-gradient-to-r from-indigo-500 to-purple-500 
              hover:from-purple-500 hover:to-indigo-500 
              hover:shadow-lg hover:scale-105 
              transition-all duration-300 ease-in-out 
              dark:from-indigo-400 dark:to-purple-600 
              dark:hover:from-purple-600 dark:hover:to-indigo-400"
-            >
-                Check Results
-            </button>
-
+                >
+                    Check Results
+                </button>
+            </div>
 
         </div>
     )
