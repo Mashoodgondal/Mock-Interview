@@ -1567,6 +1567,8 @@ import chatSession from '../../../../../../utils/gemini';
 import { db } from '../../../../../../utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion }) => {
     const { user } = useUser()
@@ -1574,7 +1576,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
     const [isTyping, setIsTyping] = useState(false)
     const [inputMode, setInputMode] = useState('voice')
     const [isClient, setIsClient] = useState(false)
-
+    const router = useRouter()
     // Speech Recognition States
     const [isRecording, setIsRecording] = useState(false)
     const [speechSupported, setSpeechSupported] = useState(false)
@@ -1644,7 +1646,9 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
             }
         }
     }, [])
-
+    const GotoResult = () => {
+        router.push('/dashboard/interview/' + mockId + '/feedback')
+    }
     const startRecording = () => {
         if (!recognitionRef.current || !speechSupported) {
             toast.error('Speech recognition not supported in this browser')
@@ -1951,26 +1955,21 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
                 </>
             )}
 
-            {/* Debug button */}
-            <div className="flex justify-center mt-4">
-                <button
-                    onClick={() => {
-                        console.log("Current Answer:", userAnswer)
-                        console.log("Interview Data:", interviewData)
-                        console.log("Active Question:", questions[activeIndex])
-                        console.log("Input Mode:", inputMode)
-                        console.log("Is Typing:", isTyping)
-                        console.log("Is Recording:", isRecording)
-                        console.log("Speech Recognition Supported:", speechSupported)
-                        console.log("Interim Result:", interimResult)
-                        console.log("Is Client:", isClient)
-                        toast('Debug info logged to console', { icon: 'ℹ️' })
-                    }}
-                    className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition-all duration-200 text-sm"
-                >
-                    🐛 Debug Info
-                </button>
-            </div>
+
+            <button
+                onClick={GotoResult}
+                className="px-5 py-2 rounded-lg font-semibold 
+             text-white bg-gradient-to-r from-indigo-500 to-purple-500 
+             hover:from-purple-500 hover:to-indigo-500 
+             hover:shadow-lg hover:scale-105 
+             transition-all duration-300 ease-in-out 
+             dark:from-indigo-400 dark:to-purple-600 
+             dark:hover:from-purple-600 dark:hover:to-indigo-400"
+            >
+                Check Results
+            </button>
+
+
         </div>
     )
 }

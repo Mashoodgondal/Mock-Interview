@@ -33,16 +33,29 @@ const HeaderDashboard = () => {
                     {/* Desktop Menu */}
                     <ul className="hidden md:flex flex-1 justify-center font-bold space-x-12 text-sm text-amber-100 dark:text-amber-100">
                         {menuItems.map((item) => (
-                            <Link key={item.href} href={item.href}>
+                            // <Link key={item.href} href={item.href}>
+                            //     <li
+                            //         className={`hover:text-blue-400 transition-all cursor-pointer ${path === item.href
+                            //             ? "text-indigo-500 dark:text-indigo-400 font-bold"
+                            //             : ""
+                            //             }`}
+                            //     >
+                            //         {item.label}
+                            //     </li>
+                            // </Link>
+                            <Link key={item.href} href={item.href} className="group">
                                 <li
-                                    className={`hover:text-blue-400 transition-all cursor-pointer ${path === item.href
-                                        ? "text-indigo-500 dark:text-indigo-400 font-bold"
-                                        : ""
-                                        }`}
+                                    className={`relative cursor-pointer transition-all 
+      ${path === item.href ? "text-indigo-500 dark:text-indigo-400 font-bold" : "text-gray-800 dark:text-white"}
+      group-hover:text-blue-400`}
                                 >
                                     {item.label}
+                                    <span
+                                        className="absolute left-0 -bottom-1 w-0 h-[2px] bg-blue-400 transition-all duration-300 group-hover:w-full"
+                                    ></span>
                                 </li>
                             </Link>
+
                         ))}
                     </ul>
 
