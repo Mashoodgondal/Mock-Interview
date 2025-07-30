@@ -1553,30 +1553,6 @@
 
 
 
-//   console.log("Active Question:", questions[activeIndex])
-//                         console.log("Input Mode:", inputMode)
-//                         console.log("Is Typing:", isTyping)
-//                         console.log("Is Recording:", isRecording)
-//                         console.log("Speech Recognition Supported:", speechSupported)
-//                         console.log("Interim Result:", interimResult)
-//                         console.log("Is Client:", isClient)
-//                         showToast('Debug info logged to console', 'info')
-//                     }}
-//                     className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition-all duration-200 text-sm"
-//                 >
-
-//   console.log("Active Question:", questions[activeIndex])
-//                         console.log("Input Mode:", inputMode)
-//                         console.log("Is Typing:", isTyping)
-//                         console.log("Is Recording:", isRecording)
-//                         console.log("Speech Recognition Supported:", speechSupported)
-//                         console.log("Interim Result:", interimResult)
-//                         console.log("Is Client:", isClient)
-//                         showToast('Debug info logged to console', 'info')
-//                     }}
-//                     className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded-lg transition-all duration-200 text-sm"
-//                 >
-
 
 
 
