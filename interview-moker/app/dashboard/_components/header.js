@@ -22,7 +22,7 @@ const HeaderDashboard = () => {
 
     const menuItems = [
         { label: "Dashboard", href: "/dashboard" },
-        { label: "Questions", href: "/question" },
+        { label: "About", href: "/question" },
         { label: "Upgrade", href: "/upgrade" },
         { label: "How it works?", href: "/how" },
     ];
