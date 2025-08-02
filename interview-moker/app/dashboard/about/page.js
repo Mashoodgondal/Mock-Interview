@@ -1,52 +1,25 @@
 import React from 'react';
+import { FaBullseye, FaBrain, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 
 const AboutUs = () => {
-    // Custom SVG Icons
-    const BrainIcon = ({ className }) => (
-        <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-            <path d="M9.5 2C8.1 2 7 3.1 7 4.5c0 .6.2 1.2.6 1.6C6.7 6.8 6 8.1 6 9.5c0 1.9 1.6 3.5 3.5 3.5.6 0 1.2-.2 1.6-.5.7.8 1.7 1.3 2.9 1.3 2.2 0 4-1.8 4-4 0-1.1-.4-2.1-1.1-2.8.4-.5.6-1.1.6-1.8 0-1.4-1.1-2.5-2.5-2.5-1 0-1.9.6-2.3 1.4-.4-.3-.9-.6-1.4-.6-.8 0-1.5.4-1.8 1zM10 16c-2.2 0-4 1.8-4 4s1.8 4 4 4 4-1.8 4-4-1.8-4-4-4zm4-2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
-        </svg>
-    );
-
-    const TargetIcon = ({ className }) => (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="12" cy="12" r="6" />
-            <circle cx="12" cy="12" r="2" />
-        </svg>
-    );
-
-    const ShieldIcon = ({ className }) => (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-        </svg>
-    );
-
-    const TrendingUpIcon = ({ className }) => (
-        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-            <polyline points="17 6 23 6 23 12" />
-        </svg>
-    );
-
     const features = [
         {
-            icon: BrainIcon,
+            icon: FaBrain,
             title: 'AI-Powered Intelligence',
             description: 'Our advanced AI technology simulates real interview scenarios with industry-specific questions and adaptive difficulty levels.'
         },
         {
-            icon: TargetIcon,
+            icon: FaBullseye,
             title: 'Personalized Feedback',
             description: 'Receive detailed analysis of your performance, including strengths, areas for improvement, and actionable recommendations.'
         },
         {
-            icon: ShieldIcon,
+            icon: FaShieldAlt,
             title: 'Secure & Private',
             description: 'Your interview sessions and personal data are protected with enterprise-grade security and complete privacy.'
         },
         {
-            icon: TrendingUpIcon,
+            icon: FaChartLine,
             title: 'Career Growth',
             description: 'Track your progress over time and see measurable improvements in your interview skills and confidence.'
         }
@@ -74,9 +47,9 @@ const AboutUs = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+        <div className="min-h-screen bg-white dark:bg-gray-600/50 transition-colors duration-300">
             {/* Hero Section */}
-            <section className="relative py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+            <section className="relative py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-600/50 dark:to-gray-600/60">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-400/5 dark:to-purple-400/5"></div>
                 <div className="relative max-w-7xl mx-auto text-center">
                     <h1 className="text-5xl md:text-6xl font-extrabold mb-6">
