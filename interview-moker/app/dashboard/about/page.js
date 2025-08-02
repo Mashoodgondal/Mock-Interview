@@ -1,13 +1,11 @@
 import React from 'react';
 import { FaBullseye, FaBrain, FaChartLine, FaShieldAlt } from 'react-icons/fa';
+import LocalButton from '../_components/Button/page';
+import Link from 'next/link';
 
 const AboutUs = () => {
     const features = [
-        {
-            icon: FaBrain,
-            title: 'AI-Powered Intelligence',
-            description: 'Our advanced AI technology simulates real interview scenarios with industry-specific questions and adaptive difficulty levels.'
-        },
+
         {
             icon: FaBullseye,
             title: 'Personalized Feedback',
@@ -26,12 +24,7 @@ const AboutUs = () => {
     ];
 
     const teamMembers = [
-        {
-            name: 'Sarah Chen',
-            role: 'CEO & Co-Founder',
-            image: 'https://images.unsplash.com/photo-1494790108755-2616b612b5c4?w=400&h=400&fit=crop&crop=face',
-            description: 'Former Google recruiter with 10+ years in talent acquisition and AI development.'
-        },
+
         {
             name: 'Michael Rodriguez',
             role: 'CTO & Co-Founder',
@@ -48,7 +41,7 @@ const AboutUs = () => {
 
     return (
         <div className="min-h-screen bg-white dark:bg-gray-600/50 transition-colors duration-300">
-            {/* Hero Section */}
+
             <section className="relative py-20 px-4 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-600/50 dark:to-gray-600/60">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-400/5 dark:to-purple-400/5"></div>
                 <div className="relative max-w-7xl mx-auto text-center">
@@ -64,12 +57,10 @@ const AboutUs = () => {
                         and provide actionable feedback to boost your confidence and career prospects.
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                        <button className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                            Start Your Journey
-                        </button>
-                        <button className="px-8 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
-                            Watch Demo
-                        </button>
+                        <Link href="/dashboard" >
+
+                            <LocalButton title="Start you'r Journy" />
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -87,8 +78,9 @@ const AboutUs = () => {
                             Our AI-powered platform democratizes access to high-quality interview preparation.
                         </p>
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center gap-8">
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
                         {features.map((feature, index) => {
                             const IconComponent = feature.icon;
                             return (
@@ -121,9 +113,10 @@ const AboutUs = () => {
                             Our diverse team of experts combines decades of experience in AI, recruitment,
                             and career development to create the best interview preparation experience.
                         </p>
+
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-12">
+                    <div className="grid md:grid-cols-2 items-center gap-8">
                         {teamMembers.map((member, index) => (
                             <div key={index} className="text-center group">
                                 <div className="relative mb-6">
@@ -158,9 +151,10 @@ const AboutUs = () => {
                     <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
                         Join thousands of successful candidates who have improved their interview skills with our AI-powered platform.
                     </p>
-                    <button className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                        Get Started Today
-                    </button>
+                    <Link href="/dashboard" >
+
+                        <LocalButton title="Get Started Today" />
+                    </Link>
                 </div>
             </section>
         </div>

@@ -1578,7 +1578,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
     const [isClient, setIsClient] = useState(false)
     const params = useParams()
     const router = useRouter()
-    const mockId = params?.mockId
+    const mockId = params?.interviewID
     // Speech Recognition States
     const [isRecording, setIsRecording] = useState(false)
     const [speechSupported, setSpeechSupported] = useState(false)
