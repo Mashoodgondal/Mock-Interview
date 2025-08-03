@@ -1,5 +1,6 @@
 import React from 'react';
-
+import Link from 'next/link';
+import LocalButton from '../_components/Button/page';
 const HowItWorks = () => {
     const steps = [
         {
@@ -124,10 +125,13 @@ const HowItWorks = () => {
                         <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
                             Join thousands of professionals who have improved their interview skills with our AI-powered platform.
                         </p>
-                        <button className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
-                            <span className="text-lg mr-2">⭐</span>
-                            Start Your Practice Session
-                        </button>
+                        <Link href="/dashboard">
+
+                            <LocalButton title=" Start Your Practice Session" />
+                        </Link>
+
+
+
                     </div>
                 </div>
             </div>
