@@ -272,10 +272,10 @@ const InterviewList = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className=" mt-8 space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Previous Interviews</h2>
+                    <h2 className="text-3xl font-bold text-yellow-300 dark:text-yellow-300">Previous Interviews</h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
                         {loading ? 'Loading...' : `${interviewList.length} interview${interviewList.length !== 1 ? 's' : ''} found`}
                     </p>
