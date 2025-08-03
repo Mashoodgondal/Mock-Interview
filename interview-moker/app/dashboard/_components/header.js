@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useState, useEffect } from "react";
 import { IoMdMenu } from "react-icons/io";
@@ -14,8 +12,6 @@ const HeaderDashboard = () => {
     const [isMounted, setIsMounted] = useState(false);
 
     const handleNav = () => setNav(!nav);
-
-    // Ensure component is mounted before rendering UserButton
     useEffect(() => {
         setIsMounted(true);
     }, []);
@@ -23,7 +19,7 @@ const HeaderDashboard = () => {
     const menuItems = [
         { label: "Dashboard", href: "/dashboard" },
         { label: "About", href: "/dashboard/about" },
-        { label: "How it works?", href: "/how" },
+        { label: "How it works?", href: "/dashboard/how" },
     ];
 
     return (
