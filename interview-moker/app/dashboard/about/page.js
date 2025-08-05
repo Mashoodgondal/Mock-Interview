@@ -2,6 +2,9 @@ import React from 'react';
 import { FaBullseye, FaBrain, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 import LocalButton from '../_components/Button/page';
 import Link from 'next/link';
+import Image from 'next/image';
+import img1 from '../../../public/images (1).jpg'
+import img2 from '../../../public/images (2).jpg'
 
 const AboutUs = () => {
     const features = [
@@ -24,18 +27,17 @@ const AboutUs = () => {
     ];
 
     const teamMembers = [
-
         {
-            name: 'Michael Rodriguez',
-            role: 'CTO & Co-Founder',
-            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-            description: 'AI researcher and engineer specializing in natural language processing and machine learning.'
+            name: 'Mshood Ali',
+
+            image: img1,
+            description: 'As the lead developer, Mashood is responsible for the complete development of the project — from designing robust backend systems to creating responsive and dynamic frontend interfaces. With a strong command of modern technologies, he ensures the project runs smoothly, efficiently, and meets all technical standards.'
         },
         {
-            name: 'Emily Johnson',
-            role: 'Head of Product',
-            image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-            description: 'Product strategist focused on creating intuitive user experiences for career development.'
+            name: 'Saif Ali',
+
+            image: img2,
+            description: 'Focused on crafting clean and user-friendly designs, Saif Ali is the creative mind behind the project’s interface and user experience. Additionally, they manage the documentation, ensuring the concept, features, and workflow are clearly presented and well-documented.'
         }
     ];
 
@@ -120,7 +122,7 @@ const AboutUs = () => {
                         {teamMembers.map((member, index) => (
                             <div key={index} className="text-center group">
                                 <div className="relative mb-6">
-                                    <img
+                                    <Image
                                         src={member.image}
                                         alt={member.name}
                                         className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg group-hover:shadow-xl transition-all duration-300"
@@ -130,9 +132,7 @@ const AboutUs = () => {
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                                     {member.name}
                                 </h3>
-                                <p className="text-blue-600 dark:text-blue-400 font-medium mb-4">
-                                    {member.role}
-                                </p>
+
                                 <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                                     {member.description}
                                 </p>
@@ -142,7 +142,7 @@ const AboutUs = () => {
                 </div>
             </section>
 
-            {/* CTA Section */}
+
             <section className="py-20 bg-gray-50 dark:bg-gray-800">
                 <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
                     <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">

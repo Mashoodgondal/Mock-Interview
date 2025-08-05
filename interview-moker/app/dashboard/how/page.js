@@ -42,13 +42,10 @@ const HowItWorks = () => {
     ];
 
     return (
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900 transition-colors duration-300">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-600/80 transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
+
                 <div className="text-center mb-16">
-                    <div className="inline-flex items-center justify-center p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mb-6">
-                        <span className="text-3xl">🎯</span>
-                    </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
                         How It <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Works</span>
                     </h2>
