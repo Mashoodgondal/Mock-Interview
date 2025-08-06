@@ -3,9 +3,9 @@ import { FaBullseye, FaBrain, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 import LocalButton from '../_components/Button/page';
 import Link from 'next/link';
 import Image from 'next/image';
-import img1 from '../../../public/images (1).jpg'
-import img2 from '../../../public/images (2).jpg'
-
+import img1 from '../../../public/images/IMG-20240608-WA0048.jpg'
+import img2 from '../../../public/images/IMG-20240608-WA0048.jpg'
+// muhammedgulzar7070570
 const AboutUs = () => {
     const features = [
 
