@@ -4,8 +4,10 @@ import LocalButton from '../_components/Button/page';
 import Link from 'next/link';
 import Image from 'next/image';
 import img1 from '../../../public/images/IMG-20240608-WA0048.jpg'
+// import img2 from '../../../public/images/IMG-20240608-WA0048.jpg'
 import img2 from '../../../public/images/IMG-20240608-WA0048.jpg'
-// muhammedgulzar7070570
+
+
 const AboutUs = () => {
     const features = [
 
@@ -125,7 +127,7 @@ const AboutUs = () => {
                                     <Image
                                         src={member.image}
                                         alt={member.name}
-                                        className="w-32 h-32 rounded-full mx-auto object-cover shadow-lg group-hover:shadow-xl transition-all duration-300"
+                                        className="w-32 h-32 rounded-lg mx-auto object-cover shadow-lg group-hover:shadow-xl transition-all duration-300"
                                     />
                                     <div className="absolute inset-0 w-32 h-32 rounded-full mx-auto bg-gradient-to-r from-blue-600/20 to-purple-600/20 group-hover:from-blue-600/30 group-hover:to-purple-600/30 transition-all duration-300"></div>
                                 </div>
