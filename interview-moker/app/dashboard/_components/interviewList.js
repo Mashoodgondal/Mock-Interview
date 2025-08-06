@@ -179,7 +179,10 @@ const InterviewList = () => {
         }
     }, [user]);
 
+
     const GetInterviewList = async () => {
+        const toastId = 'load-toast';
+
         try {
             setLoading(true);
             setError(null);
@@ -194,18 +197,20 @@ const InterviewList = () => {
             setInterviewList(result);
 
             if (result.length === 0) {
-                toast.success('No interviews found. Create your first interview!');
+                toast.success('No interviews found. Create your first interview!', { id: toastId });
             } else {
-                toast.success(`Loaded ${result.length} interview${result.length > 1 ? 's' : ''}`);
+                toast.success(`Loaded ${result.length} interview${result.length > 1 ? 's' : ''}`, { id: toastId });
             }
         } catch (error) {
             console.error('Error fetching interviews:', error);
             setError('Failed to load interviews');
-            toast.error('Failed to load interviews. Please try again.');
+            toast.error('Failed to load interviews. Please try again.', { id: toastId });
         } finally {
             setLoading(false);
         }
     };
+
+
 
     const handleDeleteInterview = async (interviewId) => {
         try {

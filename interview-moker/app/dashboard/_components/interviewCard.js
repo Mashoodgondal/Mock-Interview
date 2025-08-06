@@ -253,23 +253,23 @@ const InterviewCard = ({ interview, onDelete }) => {
         }
     };
 
+
     const onStart = async () => {
         try {
             setStartLoading(true);
-            toast.loading('Starting interview...', { id: 'start-interview' });
 
-            // Simulate some loading time (remove in production)
-            await new Promise(resolve => setTimeout(resolve, 800));
+            // Optionally add a small delay for smoother UX
+            await new Promise(resolve => setTimeout(resolve, 300));
 
+            // Navigate to the interview page
             router.push('/dashboard/interview/' + interview?.mockId);
-            toast.success('Interview started successfully!', { id: 'start-interview' });
         } catch (error) {
             console.error('Error starting interview:', error);
-            toast.error('Failed to start interview. Please try again.', { id: 'start-interview' });
-        } finally {
-            setStartLoading(false);
+            toast.error('Failed to start interview. Please try again.');
+            setStartLoading(false); // Only stop loading on error
         }
     };
+
 
     const onFeedback = async () => {
         try {
