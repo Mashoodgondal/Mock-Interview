@@ -171,7 +171,7 @@ const NewInterview = () => {
                     console.error("Database update error:", dbErr);
                 }
 
-                // ✅ Delay for 3 seconds before redirecting
+
                 await new Promise((resolve) => setTimeout(resolve, 3000));
 
                 toast.dismiss(loadingToast);
