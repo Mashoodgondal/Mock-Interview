@@ -67,13 +67,11 @@ const InterviewCard = ({ interview, onDelete }) => {
     const onFeedback = async () => {
         try {
             setFeedbackLoading(true);
-            toast.loading('Loading feedback...', { id: 'feedback' });
 
-            // Simulate some loading time (remove in production)
-            await new Promise(resolve => setTimeout(resolve, 800));
+            await new Promise(resolve => setTimeout(resolve, 300));
 
             router.push('/dashboard/interview/' + interview?.mockId + '/feedback');
-            toast.success('Feedback loaded successfully!', { id: 'feedback' });
+
         } catch (error) {
             console.error('Error loading feedback:', error);
             toast.error('Failed to load feedback. Please try again.', { id: 'feedback' });
