@@ -141,7 +141,7 @@ const Feedback = () => {
                                 >
                                     {/* Question Header */}
                                     <div
-                                        className="p-6 cursor-pointer hover:bg-gray-500 dark:hover:bg-gray-700 transition-colors duration-150"
+                                        className="p-6 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-150"
                                         onClick={() => toggleExpanded(index)}
                                     >
                                         <div className="flex items-start justify-between">
