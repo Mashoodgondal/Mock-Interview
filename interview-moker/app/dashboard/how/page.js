@@ -63,18 +63,18 @@ const HowItWorks = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
                         {steps.map((step, index) => {
                             return (
-                                <div key={step.id} className="relative group">
+                                <div key={index} className="relative group">
                                     {/* Mobile Connection Line */}
-                                    {index < steps.length - 1 && (
+                                    {index < step.length - 1 && (
                                         <div className="lg:hidden absolute left-1/2 -bottom-4 w-0.5 h-8 bg-gradient-to-b from-gray-300 to-transparent dark:from-gray-600 transform -translate-x-1/2 z-0"></div>
                                     )}
 
                                     {/* Step Card */}
                                     <div className="relative bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 group-hover:border-gray-200 dark:group-hover:border-gray-600">
                                         {/* Step Number */}
-                                        <div className="absolute -top-4 left-8 bg-gradient-to-r from-gray-800 to-gray-700 dark:from-white dark:to-gray-100 text-white dark:text-gray-900 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
+                                        {/* <div className="absolute -top-4 left-8 bg-gradient-to-r from-gray-800 to-gray-700 dark:from-white dark:to-gray-100 text-white dark:text-gray-900 rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
                                             {step.id}
-                                        </div>
+                                        </div> */}
 
                                         {/* Emoji */}
                                         <div className={`inline-flex items-center justify-center p-4 rounded-2xl bg-gradient-to-r ${step.color} mb-6 group-hover:scale-110 transition-transform duration-300`}>

@@ -182,7 +182,7 @@ const InterviewCard = ({ interview, onDelete }) => {
     return (
         <>
             <div className="relative group perspective-1000">
-                {/* Delete Button - Top Right Corner */}
+
                 <button
                     onClick={handleDeleteClick}
                     disabled={startLoading || feedbackLoading || deleteLoading}

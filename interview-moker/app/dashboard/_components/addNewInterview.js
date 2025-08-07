@@ -46,8 +46,6 @@ const NewInterview = () => {
 
         return selectedPrompt + ` Make questions unique and avoid repetition. Session ID: ${timestamp}. REMINDER: Response must be valid JSON array only.`;
     };
-
-
     const SubmitHandler = async (e) => {
         if (e) e.preventDefault();
 
@@ -63,7 +61,7 @@ const NewInterview = () => {
             const InputPrompt = getRandomPromptVariation(jobPosition, jobDescription, jobExperience);
             const newMockid = uuidv4();
 
-            await Promise.all([
+            const [aiResult] = await Promise.all([
                 chatSession.sendMessage(InputPrompt),
                 db.insert(MockInterview).values({
                     mockId: newMockid,
@@ -74,111 +72,111 @@ const NewInterview = () => {
                     createdBy: user?.primaryEmailAddress?.emailAddress,
                     createdAt: moment().format('DD-MM-YYYY')
                 })
-            ]).then(async ([aiResult]) => {
-                const rawText = await aiResult.response.text();
+            ]);
 
-                let cleanedJson = rawText
-                    .replace(/```json/gi, '')
-                    .replace(/```/g, '')
-                    .replace(/^\s*[\r\n]+/gm, '')
-                    .trim();
+            const rawText = await aiResult.response.text();
 
-                const jsonStart = cleanedJson.indexOf('[') !== -1 ? cleanedJson.indexOf('[') : cleanedJson.indexOf('{');
-                const jsonEnd = cleanedJson.lastIndexOf(']') !== -1 ? cleanedJson.lastIndexOf(']') + 1 : cleanedJson.lastIndexOf('}') + 1;
+            let cleanedJson = rawText
+                .replace(/```json/gi, '')
+                .replace(/```/g, '')
+                .replace(/^\s*[\r\n]+/gm, '')
+                .trim();
 
-                if (jsonStart !== -1 && jsonEnd !== -1) {
-                    cleanedJson = cleanedJson.substring(jsonStart, jsonEnd);
-                }
+            const jsonStart = cleanedJson.indexOf('[') !== -1 ? cleanedJson.indexOf('[') : cleanedJson.indexOf('{');
+            const jsonEnd = cleanedJson.lastIndexOf(']') !== -1 ? cleanedJson.lastIndexOf(']') + 1 : cleanedJson.lastIndexOf('}') + 1;
 
-                let parsedJson;
-                let MockjsonResp;
+            if (jsonStart !== -1 && jsonEnd !== -1) {
+                cleanedJson = cleanedJson.substring(jsonStart, jsonEnd);
+            }
 
+            let parsedJson;
+            let MockjsonResp;
+
+            try {
+                parsedJson = JSON.parse(cleanedJson);
+                MockjsonResp = cleanedJson;
+            } catch (firstError) {
                 try {
-                    parsedJson = JSON.parse(cleanedJson);
-                    MockjsonResp = cleanedJson;
-                } catch (firstError) {
+                    let fixedJson = cleanedJson
+                        .replace(/,(\s*[}\]])/g, '$1')
+                        .replace(/([{,]\s*)(\w+):/g, '$1"$2":')
+                        .replace(/:\s*'([^']*)'/g, ': "$1"')
+                        .replace(/\\n/g, '\\\\n')
+                        .replace(/\n/g, ' ')
+                        .replace(/\r/g, '')
+                        .replace(/\t/g, ' ')
+                        .replace(/\\/g, '\\\\')
+                        .replace(/\\\\"/g, '\\"')
+                        .replace(/\\\\n/g, '\\n');
+
+                    parsedJson = JSON.parse(fixedJson);
+                    MockjsonResp = fixedJson;
+                } catch (secondError) {
                     try {
-                        let fixedJson = cleanedJson
-                            .replace(/,(\s*[}\]])/g, '$1')
-                            .replace(/([{,]\s*)(\w+):/g, '$1"$2":')
-                            .replace(/:\s*'([^']*)'/g, ': "$1"')
-                            .replace(/\\n/g, '\\\\n')
-                            .replace(/\n/g, ' ')
-                            .replace(/\r/g, '')
-                            .replace(/\t/g, ' ')
-                            .replace(/\\/g, '\\\\')
-                            .replace(/\\\\"/g, '\\"')
-                            .replace(/\\\\n/g, '\\n');
+                        const questionPattern = /"question"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
+                        const answerPattern = /"answer"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
 
-                        parsedJson = JSON.parse(fixedJson);
-                        MockjsonResp = fixedJson;
-                    } catch (secondError) {
-                        try {
-                            const questionPattern = /"question"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
-                            const answerPattern = /"answer"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
+                        const questions = [];
+                        const answers = [];
 
-                            const questions = [];
-                            const answers = [];
-
-                            let questionMatch;
-                            while ((questionMatch = questionPattern.exec(cleanedJson)) !== null) {
-                                questions.push(questionMatch[1]);
-                            }
-
-                            let answerMatch;
-                            while ((answerMatch = answerPattern.exec(cleanedJson)) !== null) {
-                                answers.push(answerMatch[1]);
-                            }
-
-                            if (questions.length > 0 && answers.length > 0 && questions.length === answers.length) {
-                                parsedJson = questions.map((question, index) => ({
-                                    question: question.replace(/\\"/g, '"').replace(/\\n/g, '\n'),
-                                    answer: answers[index].replace(/\\"/g, '"').replace(/\\n/g, '\n')
-                                }));
-                                MockjsonResp = JSON.stringify(parsedJson, null, 2);
-                            } else {
-                                throw new Error("Could not extract valid question-answer pairs");
-                            }
-                        } catch (thirdError) {
-                            console.error("All JSON parsing attempts failed");
-                            toast.dismiss(loadingToast);
-                            toast.error("Failed to generate valid interview data.");
-                            return;
+                        let questionMatch;
+                        while ((questionMatch = questionPattern.exec(cleanedJson)) !== null) {
+                            questions.push(questionMatch[1]);
                         }
+
+                        let answerMatch;
+                        while ((answerMatch = answerPattern.exec(cleanedJson)) !== null) {
+                            answers.push(answerMatch[1]);
+                        }
+
+                        if (questions.length > 0 && answers.length > 0 && questions.length === answers.length) {
+                            parsedJson = questions.map((question, index) => ({
+                                question: question.replace(/\\"/g, '"').replace(/\\n/g, '\n'),
+                                answer: answers[index].replace(/\\"/g, '"').replace(/\\n/g, '\n')
+                            }));
+                            MockjsonResp = JSON.stringify(parsedJson, null, 2);
+                        } else {
+                            throw new Error("Could not extract valid question-answer pairs");
+                        }
+                    } catch (thirdError) {
+                        console.error("All JSON parsing attempts failed");
+                        toast.dismiss(loadingToast);
+                        toast.error("Failed to generate valid interview data.");
+                        return;
                     }
                 }
+            }
 
-                if (!Array.isArray(parsedJson) || parsedJson.length === 0) return;
+            if (!Array.isArray(parsedJson) || parsedJson.length === 0) return;
 
-                const isValidStructure = parsedJson.every(item =>
-                    item &&
-                    typeof item === 'object' &&
-                    typeof item.question === 'string' &&
-                    typeof item.answer === 'string' &&
-                    item.question.trim().length > 0 &&
-                    item.answer.trim().length > 0
-                );
+            const isValidStructure = parsedJson.every(item =>
+                item &&
+                typeof item === 'object' &&
+                typeof item.question === 'string' &&
+                typeof item.answer === 'string' &&
+                item.question.trim().length > 0 &&
+                item.answer.trim().length > 0
+            );
 
-                if (!isValidStructure) return;
+            if (!isValidStructure) return;
 
-                setjsonResp(MockjsonResp);
+            setjsonResp(MockjsonResp);
+            setOpen(false);
 
-                try {
-                    await db.update(MockInterview)
-                        .set({ jsonMockResp: MockjsonResp })
-                        .where(eq(MockInterview.mockId, newMockid));
-                } catch (dbErr) {
-                    console.error("Database update error:", dbErr);
-                }
+            // Redirect immediately
+            router.push(`dashboard/interview/${newMockid}`);
 
+            // Update DB in the background
+            try {
+                await db.update(MockInterview)
+                    .set({ jsonMockResp: MockjsonResp })
+                    .where(eq(MockInterview.mockId, newMockid));
+            } catch (dbErr) {
+                console.error("Database update error:", dbErr);
+            }
 
-                await new Promise((resolve) => setTimeout(resolve, 3000));
-
-                toast.dismiss(loadingToast);
-                toast.success("Redirecting to interview setup...");
-                setOpen(false);
-                router.push(`dashboard/interview/${newMockid}`);
-            });
+            toast.dismiss(loadingToast);
+            toast.success("Redirecting to interview setup...");
 
         } catch (err) {
             console.error("Error during API call or processing:", err);
@@ -188,6 +186,148 @@ const NewInterview = () => {
             setloading(false);
         }
     };
+
+
+    // const SubmitHandler = async (e) => {
+    //     if (e) e.preventDefault();
+
+    //     if (!jobPosition || !jobDescription || !jobExperience) {
+    //         toast.error("Please fill in all the fields: Job Position, Description, and Experience.");
+    //         return;
+    //     }
+
+    //     setloading(true);
+    //     const loadingToast = toast.loading("Generating interview questions...");
+
+    //     try {
+    //         const InputPrompt = getRandomPromptVariation(jobPosition, jobDescription, jobExperience);
+    //         const newMockid = uuidv4();
+
+    //         await Promise.all([
+    //             chatSession.sendMessage(InputPrompt),
+    //             db.insert(MockInterview).values({
+    //                 mockId: newMockid,
+    //                 jsonMockResp: JSON.stringify([]),
+    //                 jobPosition,
+    //                 jobDesc: jobDescription,
+    //                 jobExperience,
+    //                 createdBy: user?.primaryEmailAddress?.emailAddress,
+    //                 createdAt: moment().format('DD-MM-YYYY')
+    //             })
+    //         ]).then(async ([aiResult]) => {
+    //             const rawText = await aiResult.response.text();
+
+    //             let cleanedJson = rawText
+    //                 .replace(/```json/gi, '')
+    //                 .replace(/```/g, '')
+    //                 .replace(/^\s*[\r\n]+/gm, '')
+    //                 .trim();
+
+    //             const jsonStart = cleanedJson.indexOf('[') !== -1 ? cleanedJson.indexOf('[') : cleanedJson.indexOf('{');
+    //             const jsonEnd = cleanedJson.lastIndexOf(']') !== -1 ? cleanedJson.lastIndexOf(']') + 1 : cleanedJson.lastIndexOf('}') + 1;
+
+    //             if (jsonStart !== -1 && jsonEnd !== -1) {
+    //                 cleanedJson = cleanedJson.substring(jsonStart, jsonEnd);
+    //             }
+
+    //             let parsedJson;
+    //             let MockjsonResp;
+
+    //             try {
+    //                 parsedJson = JSON.parse(cleanedJson);
+    //                 MockjsonResp = cleanedJson;
+    //             } catch (firstError) {
+    //                 try {
+    //                     let fixedJson = cleanedJson
+    //                         .replace(/,(\s*[}\]])/g, '$1')
+    //                         .replace(/([{,]\s*)(\w+):/g, '$1"$2":')
+    //                         .replace(/:\s*'([^']*)'/g, ': "$1"')
+    //                         .replace(/\\n/g, '\\\\n')
+    //                         .replace(/\n/g, ' ')
+    //                         .replace(/\r/g, '')
+    //                         .replace(/\t/g, ' ')
+    //                         .replace(/\\/g, '\\\\')
+    //                         .replace(/\\\\"/g, '\\"')
+    //                         .replace(/\\\\n/g, '\\n');
+
+    //                     parsedJson = JSON.parse(fixedJson);
+    //                     MockjsonResp = fixedJson;
+    //                 } catch (secondError) {
+    //                     try {
+    //                         const questionPattern = /"question"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
+    //                         const answerPattern = /"answer"\s*:\s*"([^"]+(?:\\.[^"]*)*)"/g;
+
+    //                         const questions = [];
+    //                         const answers = [];
+
+    //                         let questionMatch;
+    //                         while ((questionMatch = questionPattern.exec(cleanedJson)) !== null) {
+    //                             questions.push(questionMatch[1]);
+    //                         }
+
+    //                         let answerMatch;
+    //                         while ((answerMatch = answerPattern.exec(cleanedJson)) !== null) {
+    //                             answers.push(answerMatch[1]);
+    //                         }
+
+    //                         if (questions.length > 0 && answers.length > 0 && questions.length === answers.length) {
+    //                             parsedJson = questions.map((question, index) => ({
+    //                                 question: question.replace(/\\"/g, '"').replace(/\\n/g, '\n'),
+    //                                 answer: answers[index].replace(/\\"/g, '"').replace(/\\n/g, '\n')
+    //                             }));
+    //                             MockjsonResp = JSON.stringify(parsedJson, null, 2);
+    //                         } else {
+    //                             throw new Error("Could not extract valid question-answer pairs");
+    //                         }
+    //                     } catch (thirdError) {
+    //                         console.error("All JSON parsing attempts failed");
+    //                         toast.dismiss(loadingToast);
+    //                         toast.error("Failed to generate valid interview data.");
+    //                         return;
+    //                     }
+    //                 }
+    //             }
+
+    //             if (!Array.isArray(parsedJson) || parsedJson.length === 0) return;
+
+    //             const isValidStructure = parsedJson.every(item =>
+    //                 item &&
+    //                 typeof item === 'object' &&
+    //                 typeof item.question === 'string' &&
+    //                 typeof item.answer === 'string' &&
+    //                 item.question.trim().length > 0 &&
+    //                 item.answer.trim().length > 0
+    //             );
+
+    //             if (!isValidStructure) return;
+
+    //             setjsonResp(MockjsonResp);
+
+    //             try {
+    //                 await db.update(MockInterview)
+    //                     .set({ jsonMockResp: MockjsonResp })
+    //                     .where(eq(MockInterview.mockId, newMockid));
+    //             } catch (dbErr) {
+    //                 console.error("Database update error:", dbErr);
+    //             }
+
+
+    //             await new Promise((resolve) => setTimeout(resolve, 3000));
+
+    //             toast.dismiss(loadingToast);
+    //             toast.success("Redirecting to interview setup...");
+    //             setOpen(false);
+    //             router.push(`dashboard/interview/${newMockid}`);
+    //         });
+
+    //     } catch (err) {
+    //         console.error("Error during API call or processing:", err);
+    //         toast.dismiss(loadingToast);
+    //         toast.error("Something went wrong. Please try again later.");
+    //     } finally {
+    //         setloading(false);
+    //     }
+    // };
 
 
 
