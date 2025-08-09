@@ -308,12 +308,11 @@ const InterviewCard = ({ interview, onDelete }) => {
                         </div>
                     </div>
 
-                    {/* Subtle 3D Card Back Effect (for depth illusion) */}
+
                     <div className="absolute inset-0 bg-gray-100 dark:bg-gray-900 rounded-xl shadow-lg transform rotate-y-180 backface-hidden translate-z-[-1px] opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
                 </div>
             </div>
 
-            {/* Delete Confirmation Modal */}
             <DeleteModal />
         </>
     );

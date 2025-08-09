@@ -163,10 +163,10 @@ const NewInterview = () => {
             setjsonResp(MockjsonResp);
             setOpen(false);
 
-            // Redirect immediately
+
             router.push(`dashboard/interview/${newMockid}`);
 
-            // Update DB in the background
+
             try {
                 await db.update(MockInterview)
                     .set({ jsonMockResp: MockjsonResp })
@@ -186,11 +186,6 @@ const NewInterview = () => {
             setloading(false);
         }
     };
-
-
-
-
-
 
     return (
         <div>

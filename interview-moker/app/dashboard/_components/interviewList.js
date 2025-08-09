@@ -59,15 +59,15 @@ const InterviewList = () => {
                 .delete(MockInterview)
                 .where(eq(MockInterview.id, interviewId));
 
-            // Remove from local state
+
             setInterviewList(prevList =>
                 prevList.filter(interview => interview.id !== interviewId)
             );
 
-            // Don't show toast here - let the InterviewCard component handle it
+
         } catch (error) {
             console.error('Error deleting interview:', error);
-            throw error; // Re-throw to handle in card component
+            throw error;
         }
     };
 

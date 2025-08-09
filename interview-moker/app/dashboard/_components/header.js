@@ -26,7 +26,6 @@ const HeaderDashboard = () => {
         <div className="w-full">
             <nav className="sticky top-0 shadow-sm bg-white/50 dark:bg-gray-900/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 z-50">
                 <div className="max-w-screen-xl flex items-center justify-between px-4 py-3 mx-auto">
-
                     <Link href='/dashboard'>
                         <h2 className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-cyan-500 to-purple-600 bg-clip-text text-transparent tracking-wide hover:from-cyan-600 hover:to-purple-700 transition-all duration-300">
                             Skill<span className="text-gray-900 dark:text-white">Verge</span>
@@ -53,14 +52,16 @@ const HeaderDashboard = () => {
                         ))}
                     </ul>
 
-                    {/* Right Controls */}
                     <div className="flex items-center space-x-4">
                         <div className="hidden md:block">
                             {isMounted ? (
                                 <UserButton
                                     appearance={{
                                         elements: {
-                                            avatarBox: "w-8 h-8"
+                                            avatarBox: "w-8 h-8",
+                                            userButtonPopoverCard: "bg-white dark:bg-gray-800",
+                                            userButtonPopoverActionButtonText: "text-gray-700 dark:text-gray-200",
+                                            userButtonPopoverFooter: "bg-gray-50 dark:bg-gray-700/50"
                                         }
                                     }}
                                 />
@@ -78,7 +79,6 @@ const HeaderDashboard = () => {
                 </div>
             </nav>
 
-            {/* Mobile Menu */}
             {nav && (
                 <div className="md:hidden fixed top-[73px] left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-lg z-40">
                     <div className="px-6 py-4">
@@ -100,16 +100,16 @@ const HeaderDashboard = () => {
                             <div className="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center space-x-3">
                                     {isMounted ? (
-                                        <>
-                                            <UserButton
-                                                appearance={{
-                                                    elements: {
-                                                        avatarBox: "w-8 h-8"
-                                                    }
-                                                }}
-                                            />
-
-                                        </>
+                                        <UserButton
+                                            appearance={{
+                                                elements: {
+                                                    avatarBox: "w-8 h-8",
+                                                    userButtonPopoverCard: "bg-white dark:bg-gray-800",
+                                                    userButtonPopoverActionButtonText: "text-gray-700 dark:text-gray-200",
+                                                    userButtonPopoverFooter: "bg-gray-50 dark:bg-gray-700/50"
+                                                }
+                                            }}
+                                        />
                                     ) : (
                                         <div className="flex items-center space-x-3">
                                             <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>

@@ -1,4 +1,3 @@
-
 "use client"
 import { db } from '../../../../../utils/db'
 import { userAnswer } from '../../../../../utils/schema'
@@ -91,7 +90,7 @@ const Feedback = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {/* Header Section */}
+
             <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <div className="max-w-5xl mx-auto px-6 py-8">
                     <div className="text-center mb-8">
@@ -103,7 +102,7 @@ const Feedback = () => {
                         </p>
                     </div>
 
-                    {/* Overall Performance Card */}
+
                     <div className={`max-w-md mx-auto rounded-lg border-2 p-6 ${getOverallRatingColorClass(overallRating)}`}>
                         <div className="text-center">
                             <h2 className="text-xl font-semibold mb-2">Overall Performance</h2>
@@ -117,7 +116,7 @@ const Feedback = () => {
                 </div>
             </div>
 
-            {/* Main Content */}
+
             <div className="max-w-5xl mx-auto px-6 py-8">
                 {feedbackData.length > 0 ? (
                     <div className="space-y-6">
@@ -139,7 +138,7 @@ const Feedback = () => {
                                     key={item.id}
                                     className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200"
                                 >
-                                    {/* Question Header */}
+
                                     <div
                                         className="p-6 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-150"
                                         onClick={() => toggleExpanded(index)}
@@ -169,10 +168,10 @@ const Feedback = () => {
                                         </div>
                                     </div>
 
-                                    {/* Expanded Content */}
+
                                     {isExpanded && (
                                         <div className="border-t border-gray-200 dark:border-gray-700 p-6 space-y-6">
-                                            {/* Your Answer Section */}
+
                                             <div>
                                                 <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                                                     Your Answer
@@ -184,7 +183,7 @@ const Feedback = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Recommended Answer Section */}
+
                                             <div>
                                                 <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                                                     Recommended Answer
@@ -196,7 +195,7 @@ const Feedback = () => {
                                                 </div>
                                             </div>
 
-                                            {/* Feedback Section */}
+
                                             <div>
                                                 <h4 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                                                     Detailed Feedback & Improvement Suggestions
