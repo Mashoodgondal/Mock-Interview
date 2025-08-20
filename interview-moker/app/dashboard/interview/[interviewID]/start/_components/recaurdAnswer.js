@@ -291,7 +291,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                         } ${!speechSupported ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                    🎤 Voice {!speechSupported ? '(Not Supported)' : ''}
+                    Voice {!speechSupported ? '(Not Supported)' : ''}
                 </button>
                 <button
                     onClick={() => handleModeSwitch('text')}
@@ -300,7 +300,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
                         : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                         }`}
                 >
-                    ⌨️ Type
+                    Type
                 </button>
             </div>
 
@@ -371,7 +371,7 @@ const RecordAnswer = ({ questions, activeIndex, interviewData, onNextQuestion })
                             <button
                                 onClick={startRecording}
                                 disabled={!interviewData?.mockId || isTyping}
-                                className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all duration-200 flex items-center gap-2"
+                                className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                                 title={isTyping ? "Cannot record while typing" : ""}
                             >
                                 <FaMicrophone />
